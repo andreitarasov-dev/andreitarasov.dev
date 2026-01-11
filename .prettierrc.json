@@ -1,0 +1,24 @@
+{
+  "trailingComma": "none",
+  "printWidth": 999,
+  "htmlWhitespaceSensitivity": "css",
+  "singleAttributePerLine": false,
+  "overrides": [
+    {
+      "files": "*.svg",
+      "options": {
+        "parser": "html"
+      }
+    },
+    {
+      "files": "*.astro",
+      "options": {
+        "parser": "astro",
+        "printWidth": 999,
+        "htmlWhitespaceSensitivity": "css",
+        "singleAttributePerLine": false
+      }
+    }
+  ],
+  "plugins": ["prettier-plugin-astro"]
+}
