@@ -21,7 +21,7 @@ export default defineConfig({
       tag: "script",
       attrs: {
         defer: true,
-        src: "https://stats.andreitarasov.dev/stats",
+        src: "https://stats.andreitarasov.dev/stats.js",
         "data-website-id": "ec06ab26-41ce-49a8-85ba-0dd668cd87c1"
       }
     }
