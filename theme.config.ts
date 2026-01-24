@@ -15,5 +15,15 @@ export default defineConfig({
       { label: "LinkedIn", url: "https://www.linkedin.com/in/andrei-tarasov/" },
       { label: "GitHub", url: "https://github.com/andreitarasov-dev" }
     ]
-  }
+  },
+  head: [
+    {
+      tag: "script",
+      attrs: {
+        defer: true,
+        src: "https://stats.andreitarasov.dev/script.js",
+        "data-website-id": "ec06ab26-41ce-49a8-85ba-0dd668cd87c1"
+      }
+    }
+  ]
 });
