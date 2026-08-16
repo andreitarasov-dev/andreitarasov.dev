@@ -114,7 +114,11 @@ new CSS is needed:
 `.link-caption-wrapper` click delegation.
 
 Move that script to `src/scripts/home-avatar.ts` and import it from the page.
-Behavior must be identical — this is a pure move, not a rewrite. Rationale: the
+Behavior must be identical: this is a move plus **type annotations only** — no
+logic changes. (Annotations are required because the file is the source of all 90
+current `astro check` errors; wrapping the body in a function with an early-return
+guard also resolves the 70 possibly-null errors, since `const` narrowing then
+reaches the nested closures.) Rationale: the
 page is about to gain content and will be edited repeatedly as Projects and Notes
 are added; leaving the machinery inline buries the markup every time.
 
@@ -130,10 +134,20 @@ text as the intro.
 
 ## Testing
 
-Playwright is already configured (`playwright.config.ts`, `tests/`).
+Playwright is configured (`playwright.config.ts`, `tests/`), but **the suite does
+not currently run**. Verified 2026-08-16:
 
-- Existing snapshot tests will need updating via `npm run test:update` — the page
-  content changes by design.
+- `tests/index.spec.ts` imports `./mockImages.ts`, which was never committed.
+  `npx playwright test --list` → `Total: 0 tests in 0 files`. There are no
+  committed snapshot baselines either. Restoring the harness is the first task.
+- Separately, `npm run build` fails with 90 `astro check` errors, all in
+  `src/pages/index.astro`'s inline script (implicit-any params, and
+  possibly-null closures). Netlify is unaffected — `netlify.toml` runs
+  `npx astro build`, which skips `astro check`. The script extraction below fixes
+  these as a side effect.
+- Coverage should be behavioural, not only pixel-based: assert the intro text,
+  the seven experience entries and their order, and the three contact links. A
+  screenshot baseline is generated once the page is in its final state.
 - Verify the avatar→logo scroll animation still works after extraction: scroll
   from top to past the title, confirm the avatar lands on the nav logo and
   crossfades. This is the main regression risk in the cleanup.
