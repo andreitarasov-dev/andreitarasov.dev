@@ -56,6 +56,10 @@ test.describe('homepage', () => {
 
     await page.waitForLoadState('networkidle');
 
+    // Astro's dev toolbar is injected by `astro dev`, which backs the test
+    // server. Hide it so the baseline captures only the site itself.
+    await page.addStyleTag({ content: 'astro-dev-toolbar { display: none !important; }' });
+
     await expect(page).toHaveScreenshot('homepage.png', {
       fullPage: true,
       maxDiffPixelRatio: 0.1
