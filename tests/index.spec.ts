@@ -13,8 +13,8 @@ test.describe("homepage", () => {
     await mockImages(page);
     await page.goto("/");
 
-    await expect(page.getByText("Product engineer who owns features end-to-end")).toBeVisible();
-    await expect(page.getByText("Nine years in the JavaScript ecosystem")).toBeVisible();
+    await expect(page.getByText("Web development is where I go deepest")).toBeVisible();
+    await expect(page.getByText("not everything I build runs in a browser")).toBeVisible();
   });
 
   test("lists all seven roles in reverse-chronological order", async ({ page }) => {
