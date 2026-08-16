@@ -1,11 +1,9 @@
 ---
 import Layout from "@sikorsky/site/components/Layout.astro";
 
-const AVATAR_SRC =
-  "https://firebasestorage.googleapis.com/v0/b/andreitarasov-dev.firebasestorage.app/o/logo.png?alt=media&token=de4b54ba-88a1-48c6-9381-32d5c6cb5f27";
+const AVATAR_SRC = "https://firebasestorage.googleapis.com/v0/b/andreitarasov-dev.firebasestorage.app/o/logo.png?alt=media&token=de4b54ba-88a1-48c6-9381-32d5c6cb5f27";
 
-const DESCRIPTION =
-  "Product engineer who owns features end-to-end — React and TypeScript, design systems, AI-assisted development. Based in Leipzig.";
+const DESCRIPTION = "Product engineer who owns features end-to-end — React and TypeScript, design systems, AI-assisted development. Based in Leipzig.";
 
 interface Role {
   role: string;
@@ -29,25 +27,10 @@ const experience: Role[] = [
     <header>
       <img src={AVATAR_SRC} alt="Andrei Tarasov" class="avatar" id="avatar" />
       <h1 id="title">Andrei Tarasov</h1>
+      <h2>Product engineer who owns features end-to-end — from shaping the problem with product and design, through architecture, to the shipped interface and what the metrics say afterwards.</h2>
+      <h2>Nine years in the JavaScript ecosystem, mostly React and TypeScript, and I still care a lot about how things look and feel. Based in Leipzig.</h2>
       <h2>
-        Product engineer who owns features end-to-end — from shaping the problem
-        with product and design, through architecture, to the shipped interface
-        and what the metrics say afterwards.
-      </h2>
-      <h2>
-        Nine years in the JavaScript ecosystem, mostly React and TypeScript, and
-        I still care a lot about how things look and feel. Based in Leipzig.
-      </h2>
-      <h2>
-        You can reach me on <a
-          href="https://www.linkedin.com/in/andrei-tarasov/"
-          class="link"
-          target="_blank">LinkedIn</a
-        >, <a href="https://github.com/andreitarasov-dev" class="link" target="_blank"
-          >GitHub</a
-        >, or at <a href="mailto:tarasov.a.dev@gmail.com" class="link"
-          >tarasov.a.dev@gmail.com</a
-        >.
+        You can reach me on <a href="https://www.linkedin.com/in/andrei-tarasov/" class="link" target="_blank">LinkedIn</a>, <a href="https://github.com/andreitarasov-dev" class="link" target="_blank">GitHub</a>, or at <a href="mailto:tarasov.a.dev@gmail.com" class="link">tarasov.a.dev@gmail.com</a>.
       </h2>
     </header>
 
@@ -81,10 +64,8 @@ const experience: Role[] = [
 
 <script>
   import { initHomeAvatar } from "../scripts/home-avatar";
-  import { initLinkCaptions } from "../scripts/link-captions";
 
   document.addEventListener("DOMContentLoaded", () => {
     initHomeAvatar();
-    initLinkCaptions();
   });
 </script>

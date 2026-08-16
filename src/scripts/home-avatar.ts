@@ -30,13 +30,11 @@ export function initHomeAvatar(): void {
   // Flags
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const clamp = (v: number, min: number, max: number): number =>
-    Math.max(min, Math.min(max, v));
+  const clamp = (v: number, min: number, max: number): number => Math.max(min, Math.min(max, v));
   const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
   // Slight ease for a smoother feel
   const ease = (t: number): number => t * (2 - t); // easeOutQuad
-  const getDocTop = (el: HTMLElement): number =>
-    el.getBoundingClientRect().top + window.scrollY;
+  const getDocTop = (el: HTMLElement): number => el.getBoundingClientRect().top + window.scrollY;
 
   // Prepare avatar for stable transforms
   avatar.style.transformOrigin = "top left";
