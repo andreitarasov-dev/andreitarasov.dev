@@ -9,12 +9,14 @@ test.describe("homepage", () => {
     await expect(page.locator("h1")).toHaveText("Andrei Tarasov");
   });
 
-  test("shows the intro positioning statement", async ({ page }) => {
+  test("shows the intro tagline", async ({ page }) => {
     await mockImages(page);
     await page.goto("/");
 
-    await expect(page.getByText("Web development is where I go deepest")).toBeVisible();
-    await expect(page.getByText("not everything I build runs in a browser")).toBeVisible();
+    await expect(page.getByText("Product engineer with a bias for owning things end-to-end")).toBeVisible();
+
+    // A single tagline paragraph, plus the contact line — nothing else.
+    await expect(page.locator(".index-page header h2")).toHaveCount(2);
   });
 
   test("lists all seven roles in reverse-chronological order", async ({ page }) => {

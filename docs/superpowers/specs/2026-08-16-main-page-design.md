@@ -1,7 +1,11 @@
 # Main page redesign — design doc
 
-Date: 2026-08-16
-Status: approved (structure), pending review (copy)
+Date: 2026-08-16 (copy and markup revised 2026-08-17)
+Status: implemented on branch `main-page-redesign`
+
+> This document was updated after implementation so it describes what actually
+> shipped. Two things changed materially from the original design: the intro copy
+> (see "Intro copy") and the experience list's markup (see "Markup").
 
 ## Goal
 
@@ -47,19 +51,36 @@ Professional experience
 
 ### Intro copy
 
-Compressed from the user's own LinkedIn About — his wording, trimmed to intro
-length. The full About is four paragraphs; the reference site's intro is 1–2
-sentences, so paragraphs 2–3 (the three focus areas, the team/mentoring material)
-are dropped here. They are the natural seed for a future `/about` page.
+One lean tagline paragraph, then the contact line. Two `<h2>` blocks in the
+header, nothing more.
 
-> Product engineer who owns features end-to-end — from shaping the problem with
-> product and design, through architecture, to the shipped interface and what the
-> metrics say afterwards.
->
-> Nine years in the JavaScript ecosystem, mostly React and TypeScript, and I still
-> care a lot about how things look and feel. Based in Leipzig.
+> Product engineer with a bias for owning things end-to-end. Mostly web,
+> occasionally not. Based in Leipzig.
 >
 > You can reach me on LinkedIn, GitHub, or at tarasov.a.dev@gmail.com.
+
+**This deliberately does not read like the LinkedIn About it started from.**
+The first draft was compressed from that profile and was rejected for two
+reasons worth recording, because they constrain future copy here:
+
+1. **No meta-commentary about the site.** Drafts that said "this is where the
+   rest of it goes" or "I write about it here" were cut. The site should not
+   explain its own existence to a visitor on arrival — the sections below do
+   that by being there. The reference site's tagline never mentions itself
+   either.
+2. **Breadth is stated as a fact about what gets built, not as a promise about
+   what will be posted.** "Mostly web, occasionally not" covers the non-web
+   projects (hardware, data-visualisation writing, trip reports) without naming
+   any of them, and stays true as new ones appear.
+
+"Owning things end-to-end" is the one phrase kept from the LinkedIn wording: it
+describes how he actually works rather than selling it.
+
+The dropped About paragraphs (focus areas, mentoring, how teams work) remain the
+natural seed for a future `/about` page. When that page exists, a second
+paragraph pointing to it belongs here.
+
+The `<meta name="description">` is kept identical to the tagline.
 
 ### Professional experience
 
@@ -68,13 +89,13 @@ the reference site.
 
 | Role | Company | Years |
 |---|---|---|
-| Senior Product Engineer | CoachHub | 2025 — now |
-| Senior Frontend Engineer | Monite | 2022 — 2025 |
-| Frontend Engineer | Tinkoff | 2021 — 2022 |
-| Frontend Engineer | Sibedge | 2019 — 2021 |
-| Frontend Engineer | AIM | 2017 — 2018 |
+| Senior Product Engineer | CoachHub | 2025 – now |
+| Senior Frontend Engineer | Monite | 2022 – 2025 |
+| Frontend Engineer | Tinkoff | 2021 – 2022 |
+| Frontend Engineer | Sibedge | 2019 – 2021 |
+| Frontend Engineer | AIM | 2017 – 2018 |
 | Frontend Engineer | Bryansk-Soft | 2017 |
-| Web Developer | Bit-Service / advertise.ru | 2013 — 2017 |
+| Web Developer | Bit-Service / advertise.ru | 2013 – 2017 |
 
 Decisions, all confirmed with the user:
 
@@ -98,14 +119,39 @@ Decisions, all confirmed with the user:
 ### Markup
 
 Uses primitives already shipped in `@sikorsky/site/src/styles/global.css`, so no
-new CSS is needed:
+new CSS is needed — **and no page-local `<style>` block either**. The theme
+already provides `section { margin-top: 64.5px }` and
+`section h2, section h3 { margin-bottom: … }`, including a `≤600px` tightening.
 
-- `#professional-experience` — the stylesheet already targets this id
-  (`margin-bottom`, `font-variant-numeric: slashed-zero` on its `ul li`).
-- `.list-with-secondary-items` — list with muted secondary lines.
-- `.caption` — company/years secondary text.
-- `.link` / `.link-caption-wrapper` — contact links, with the existing click and
-  keyboard handling.
+The experience list must follow the exact structure the theme is built for,
+verified against the reference site's own source:
+
+```html
+<section id="professional-experience">
+  <h3>Professional Experience</h3>
+  <ul>
+    <li>
+      <div>
+        <strong>Role, <span class="secondary">Company, 2013 – 2017</span></strong>
+      </div>
+    </li>
+  </ul>
+</section>
+```
+
+- A **plain `<ul>`**. Do *not* use `.list-with-secondary-items` — that class is
+  for lists whose items are themselves secondary, and it mutes the bullets to
+  grey. Using it made the whole block read as de-emphasised.
+- **One `<div>` per `<li>`**, containing a single `<strong>`. Do not stack a
+  second `<div class="caption">`; that puts the company on its own line at 16px.
+- `.secondary` (not `.caption`) for company and years, inline in the same line.
+- Year ranges use thin space + en dash + thin space (`U+2009 U+2013 U+2009`,
+  i.e. `&thinsp;–&thinsp;`), which is the theme's convention.
+- Section headings are Title Case: "Professional Experience".
+
+Contact links are plain `.link` anchors inline in an `<h2>`.
+`.link-caption-wrapper` is **not** used — it makes a whole wrapper clickable,
+which suits a link-plus-caption block, not links inside a sentence.
 
 ### Cleanup: extract the avatar animation
 
@@ -122,15 +168,18 @@ reaches the nested closures.) Rationale: the
 page is about to gain content and will be edited repeatedly as Projects and Notes
 are added; leaving the machinery inline buries the markup every time.
 
-The `.link-caption-wrapper` delegation is generic, not home-specific. It moves to
-its own module (`src/scripts/link-captions.ts`) so future pages can import it
-without dragging the avatar animation along.
+The `.link-caption-wrapper` delegation was initially moved to its own module
+(`src/scripts/link-captions.ts`) on the theory that future pages would want it.
+**That module was subsequently deleted**: nothing in `src/` uses
+`.link-caption-wrapper`, so it shipped as dead code that ran on every page load
+and iterated an empty NodeList. If a future section needs whole-block click
+behaviour, recover it from git history rather than carrying it unused.
 
 ### Metadata
 
-`<Layout title description>` currently reads `"Frontend Engineer | React Expert"`.
-Update the description to match the new positioning — drawn from the same About
-text as the intro.
+`<Layout title description>` originally read `"Frontend Engineer | React Expert"`.
+The description is now kept identical to the tagline paragraph, so there is one
+piece of positioning copy on the page rather than two that can drift apart.
 
 ## Testing
 
