@@ -14,13 +14,13 @@
   "dependencies": {
     "@astrojs/check": "^0.7.0",
     "@astrojs/ts-plugin": "^1.8.0",
-    "@sikorsky/site": "^0.5.0",
+    "@sikorsky/site": "^0.5.3",
     "astro": "4.16.1",
     "firebase": "^11.0.1",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@playwright/test": "^1.49.0",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^22.8.7",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
