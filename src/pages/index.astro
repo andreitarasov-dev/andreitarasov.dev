@@ -1,19 +1,83 @@
 ---
 import Layout from "@sikorsky/site/components/Layout.astro";
+
+const AVATAR_SRC =
+  "https://firebasestorage.googleapis.com/v0/b/andreitarasov-dev.firebasestorage.app/o/logo.png?alt=media&token=de4b54ba-88a1-48c6-9381-32d5c6cb5f27";
+
+const DESCRIPTION =
+  "Product engineer who owns features end-to-end — React and TypeScript, design systems, AI-assisted development. Based in Leipzig.";
+
+interface Role {
+  role: string;
+  company: string;
+  years: string;
+}
+
+const experience: Role[] = [
+  { role: "Senior Product Engineer", company: "CoachHub", years: "2025 — now" },
+  { role: "Senior Frontend Engineer", company: "Monite", years: "2022 — 2025" },
+  { role: "Frontend Engineer", company: "Tinkoff", years: "2021 — 2022" },
+  { role: "Frontend Engineer", company: "Sibedge", years: "2019 — 2021" },
+  { role: "Frontend Engineer", company: "AIM", years: "2017 — 2018" },
+  { role: "Frontend Engineer", company: "Bryansk-Soft", years: "2017" },
+  { role: "Web Developer", company: "Bit-Service / advertise.ru", years: "2013 — 2017" }
+];
 ---
 
-<Layout title="Andrei Tarasov" description="Frontend Engineer | React Expert">
+<Layout title="Andrei Tarasov" description={DESCRIPTION}>
   <div class="index-page">
     <header>
-      <img src="https://firebasestorage.googleapis.com/v0/b/andreitarasov-dev.firebasestorage.app/o/logo.png?alt=media&token=de4b54ba-88a1-48c6-9381-32d5c6cb5f27" alt="Andrei Tarasov" class="avatar" id="avatar" />
+      <img src={AVATAR_SRC} alt="Andrei Tarasov" class="avatar" id="avatar" />
       <h1 id="title">Andrei Tarasov</h1>
-      <h2>Frontend engineer passionate about crafting exceptional user experiences in the dynamic realm of the JavaScript ecosystem.</h2>
       <h2>
-        You can reach me on <a href="https://www.linkedin.com/in/andrei-tarasov/" class="link" target="_blank">LinkedIn</a>, <a href="https://github.com/andreitarasov-dev" class="link" target="_blank">GitHub</a>, or at <a href="mailto:tarasov.a.dev@gmail.com" class="link">tarasov.a.dev@gmail.com</a>.
+        Product engineer who owns features end-to-end — from shaping the problem
+        with product and design, through architecture, to the shipped interface
+        and what the metrics say afterwards.
+      </h2>
+      <h2>
+        Nine years in the JavaScript ecosystem, mostly React and TypeScript, and
+        I still care a lot about how things look and feel. Based in Leipzig.
+      </h2>
+      <h2>
+        You can reach me on <a
+          href="https://www.linkedin.com/in/andrei-tarasov/"
+          class="link"
+          target="_blank">LinkedIn</a
+        >, <a href="https://github.com/andreitarasov-dev" class="link" target="_blank"
+          >GitHub</a
+        >, or at <a href="mailto:tarasov.a.dev@gmail.com" class="link"
+          >tarasov.a.dev@gmail.com</a
+        >.
       </h2>
     </header>
+
+    <section id="professional-experience">
+      <h3>Professional experience</h3>
+      <ul class="list-with-secondary-items">
+        {
+          experience.map((job) => (
+            <li>
+              <div>{job.role}</div>
+              <div class="caption">
+                {job.company} · {job.years}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
   </div>
 </Layout>
+
+<style>
+  #professional-experience {
+    margin-top: var(--spacing-xxlarge);
+  }
+
+  #professional-experience h3 {
+    margin-bottom: var(--spacing-regular);
+  }
+</style>
 
 <script>
   import { initHomeAvatar } from "../scripts/home-avatar";
