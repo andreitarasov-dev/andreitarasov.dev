@@ -11,14 +11,20 @@ interface Role {
   years: string;
 }
 
+/**
+ * Year-range separator: thin space + en dash + thin space (&thinsp;–&thinsp;).
+ * This is the convention the theme's own pages use for date ranges.
+ */
+const TO = " – ";
+
 const experience: Role[] = [
-  { role: "Senior Product Engineer", company: "CoachHub", years: "2025 — now" },
-  { role: "Senior Frontend Engineer", company: "Monite", years: "2022 — 2025" },
-  { role: "Frontend Engineer", company: "Tinkoff", years: "2021 — 2022" },
-  { role: "Frontend Engineer", company: "Sibedge", years: "2019 — 2021" },
-  { role: "Frontend Engineer", company: "AIM", years: "2017 — 2018" },
+  { role: "Senior Product Engineer", company: "CoachHub", years: `2025${TO}now` },
+  { role: "Senior Frontend Engineer", company: "Monite", years: `2022${TO}2025` },
+  { role: "Frontend Engineer", company: "Tinkoff", years: `2021${TO}2022` },
+  { role: "Frontend Engineer", company: "Sibedge", years: `2019${TO}2021` },
+  { role: "Frontend Engineer", company: "AIM", years: `2017${TO}2018` },
   { role: "Frontend Engineer", company: "Bryansk-Soft", years: "2017" },
-  { role: "Web Developer", company: "Bit-Service / advertise.ru", years: "2013 — 2017" }
+  { role: "Web Developer", company: "Bit-Service / advertise.ru", years: `2013${TO}2017` }
 ];
 ---
 
@@ -35,14 +41,18 @@ const experience: Role[] = [
     </header>
 
     <section id="professional-experience">
-      <h3>Professional experience</h3>
-      <ul class="list-with-secondary-items">
+      <h3>Professional Experience</h3>
+      <ul>
         {
           experience.map((job) => (
             <li>
-              <div>{job.role}</div>
-              <div class="caption">
-                {job.company} · {job.years}
+              <div>
+                <strong>
+                  {job.role},{" "}
+                  <span class="secondary">
+                    {job.company}, {job.years}
+                  </span>
+                </strong>
               </div>
             </li>
           ))
@@ -51,16 +61,6 @@ const experience: Role[] = [
     </section>
   </div>
 </Layout>
-
-<style>
-  #professional-experience {
-    margin-top: var(--spacing-xxlarge);
-  }
-
-  #professional-experience h3 {
-    margin-bottom: var(--spacing-regular);
-  }
-</style>
 
 <script>
   import { initHomeAvatar } from "../scripts/home-avatar";
