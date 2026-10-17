@@ -29,7 +29,7 @@ test.describe("homepage", () => {
     await expect(items.first()).toContainText("Senior Product Engineer");
     await expect(items.first()).toContainText("CoachHub");
     await expect(items.last()).toContainText("Web Developer");
-    await expect(items.last()).toContainText("Bit-Service");
+    await expect(items.last()).toContainText("advertise.ru");
   });
 
   test("exposes the three contact routes", async ({ page }) => {

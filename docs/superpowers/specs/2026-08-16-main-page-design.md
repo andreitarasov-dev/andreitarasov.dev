@@ -95,15 +95,18 @@ the reference site.
 | Frontend Engineer | Sibedge | 2019 – 2021 |
 | Frontend Engineer | AIM | 2017 – 2018 |
 | Frontend Engineer | Bryansk-Soft | 2017 |
-| Web Developer | Bit-Service / advertise.ru | 2013 – 2017 |
+| Web Developer | advertise.ru | 2013 – 2017 |
 
 Decisions, all confirmed with the user:
 
 - **Full history, plain and factual.** All seven roles, no commentary. An unbroken
   timeline is more credible than a curated one.
-- **Russian company names transliterated.** Бит-Сервис → Bit-Service,
-  Брянск-Софт → Bryansk-Soft. Cyrillic entries on an English page read as
-  unfinished and are unsearchable for a German recruiter.
+- **Russian company names transliterated.** Брянск-Софт → Bryansk-Soft. Cyrillic
+  entries on an English page read as unfinished and are unsearchable for a
+  German recruiter.
+- **The 2013–2017 employer is listed as advertise.ru**, the product, not
+  Бит-Сервис / Bit-Service, the legal entity behind it. advertise.ru is the
+  name anyone would recognise.
 - **Titles normalized to "Engineer".** Notion says "Frontend Developer" for
   AIM / Sibedge / Tinkoff; the site uses "Engineer" throughout for a consistent
   register.
