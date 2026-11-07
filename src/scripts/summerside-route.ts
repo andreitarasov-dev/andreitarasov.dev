@@ -9,7 +9,7 @@ export function initStoryRoute(root:HTMLElement):()=>void {
  const update=()=>{
   frame=0;
   const anchors:ProgressAnchor[]=sections.map(s=>({stage:Number(s.dataset.anchorStage) as StageId,sectionId:s.id,top:s.getBoundingClientRect().top+scrollY,progress:Number(s.dataset.anchorProgress)}));
-  const readingLine=Math.max(innerHeight*.35,route.getBoundingClientRect().top<100&&innerWidth<=700?route.getBoundingClientRect().bottom+16:0);
+  const readingLine=Math.max(innerHeight*.35,route.getBoundingClientRect().top<100&&innerWidth<1280?route.getBoundingClientRect().bottom+16:0);
   const state=resolveProgress(anchors,scrollY+readingLine);
   route.dataset.currentStage=String(state.stage);route.dataset.progress=String(state.progress);
   route.querySelector<HTMLElement>('[data-route-label]')!.textContent=sections.find(s=>s.id===state.sectionId)?.dataset.anchorLabel||'Kaliningrad';

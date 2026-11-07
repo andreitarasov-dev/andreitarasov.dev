@@ -1,80 +1,57 @@
+/* Inherit article typography, lists, links and navigation from @sikorsky/site. */
 body:has(.summerside) { --story-accent:#ff6633; }
-body:has(.summerside) .content { max-width:1120px; min-width:0; padding-top:100px; }
-body:has(.summerside) :is(.nav-content,footer) {min-width:0;}
+body:has(.summerside) :is(.content,.nav-content,footer) {min-width:0;}
 .summerside {overflow-wrap:break-word;}
-.summerside a {color:inherit;text-decoration:underline;text-decoration-color:var(--caption_light);text-underline-offset:4px;}
-.summerside a:hover {text-decoration-color:var(--story-accent);}
 .summerside :focus-visible {outline:2px solid var(--constant_black);outline-offset:5px;}
-.summerside section {scroll-margin-top:140px;}
-.story-header,.story-prose {max-width:788px;margin-left:auto;margin-right:auto;}
-.story-header h1 {margin-top:24px;}
-.story-eyebrow {font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--caption_dark);}
-.story-subtitle {font-size:24px;color:var(--caption_dark);margin-bottom:32px;}
-.story-note {font-size:14px;line-height:1.6;color:var(--caption_dark);border-left:2px solid var(--caption_light);padding-left:18px;max-width:620px;}
+.summerside section, .summerside #title {scroll-margin-top:80px;}
+.story-note {font-size:14px;line-height:1.6;color:var(--caption_dark);max-width:620px;margin-top:24px;}
 .summerside .editorial-note {margin:24px 0;}
 .summerside .editorial-note p {font-size:14px;line-height:1.6;margin:8px 0 0;}
-.story-toc {display:flex;flex-wrap:wrap;gap:12px 24px;font-size:14px;margin:32px 0;}
-.story-overview {background:var(--background);padding:32px;display:grid;grid-template-columns:1fr 1.8fr;align-items:center;margin:48px 0 72px;}
-.story-overview h2 {font-size:28px;line-height:1.2;margin-top:18px;}
-.story-overview p {font-size:14px;line-height:1.6;}
-.story-overview svg {width:100%;height:auto;overflow:hidden;}
+.story-overview svg {display:block;width:100%;height:auto;max-height:480px;overflow:hidden;}
 .map-land {fill:var(--background_dark);stroke:white;stroke-width:.7;}
 .map-tracks {fill:none;stroke:var(--story-accent);stroke-width:2.5;stroke-linejoin:round;}
-.map-legend span {color:var(--story-accent);}
 .story-overview svg text {font-size:13px;fill:var(--constant_black);}
 .story-overview svg circle {fill:var(--constant_black);}
-.summerside h2 {font-size:32px;line-height:1.25;margin:14px 0 24px;}
-.summerside p {margin-bottom:24px;}
-.summerside li {margin-bottom:12px;}
-.story-prose section {margin-bottom:64px;}
-.story-photo {margin:24px 0;}
+.story-photo {margin:32px 0;}
 .story-photo a {display:block;}
 .story-photo img {display:block;width:100%;height:auto;background:var(--background);font-size:14px;color:var(--caption_dark);}
-.story-photo figcaption {color:var(--caption_dark);font-size:12px;margin-top:10px;}
+.story-photo figcaption {color:var(--caption_dark);font-size:16px;line-height:24px;margin-top:8px;}
 .story-gallery {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start;margin:32px 0;}
 .story-gallery .story-photo {margin:0;}
 .story-gallery .story-photo:first-child {grid-column:1/-1;}
 .equipment-photos {display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.story-journey {display:grid;grid-template-columns:minmax(0,700px) 240px;gap:56px;position:relative;margin-top:80px;}
+.story-journey {position:relative;display:grid;grid-template-columns:minmax(0,1fr);margin-top:64.5px;}
 .story-chapters {grid-column:1;grid-row:1;min-width:0;}
-.story-chapters section {margin:0 0 96px;}
-.story-route {grid-column:2;grid-row:1;align-self:start;position:sticky;top:64px;padding:16px 0;}
-.story-route strong {display:block;font-size:16px;margin:12px 0;}
+.story-chapters section:first-child {margin-top:0;}
+.story-route {grid-column:1;grid-row:1;align-self:start;position:sticky;top:64px;width:160px;margin-left:calc(100% + 24px);}
+.story-route strong {display:block;font-size:14px;font-weight:var(--font-weight-medium);margin-bottom:12px;}
 .story-route svg {width:100%;height:auto;max-height:40vh;}
 .story-route .route-compact {display:none;}
-.story-route p {font-size:12px;line-height:1.5;color:var(--caption_dark);}
 .route-base {fill:none;stroke:var(--caption_light);stroke-width:2;}
 .route-progress {fill:none;stroke:var(--story-accent);stroke-width:3;stroke-linejoin:round;}
 .route-marker {fill:var(--story-accent);stroke:white;stroke-width:2;}
-.route-percent {font-size:12px;color:var(--caption_dark);}
 .story-route [hidden] {display:none!important;}
 .story-transfer {font-size:14px;color:var(--caption_dark);}
-.summerside details {border-block:1px solid var(--caption_light);padding:18px 0;margin:28px 0;}
-.summerside summary {cursor:pointer;font-weight:600;}
+.summerside details {margin:32px 0;}
+.summerside summary {cursor:pointer;font-weight:var(--font-weight-strong);}
 .summerside details[open] summary {margin-bottom:24px;}
-@media(max-width:700px){
- body:has(.summerside) .content {padding-top:88px;}
- .story-header h1 {font-size:46px;line-height:1;letter-spacing:-1.4px;}
- .story-subtitle {font-size:20px;line-height:1.4;}
- .story-note {font-size:13px;}
- .story-overview {grid-template-columns:1fr;padding:24px 16px;margin:40px -16px;}
- .story-overview svg {max-height:340px;}
- .summerside h2 {font-size:28px;}
- .summerside p {font-size:17px;line-height:1.55;}
- .story-journey {display:flex;flex-direction:column;gap:0;margin-top:56px;}
- .story-route {order:-1;top:40px;z-index:5;background:#fffffff5;backdrop-filter:blur(10px);width:calc(100% + 32px);margin:0 -16px 32px;padding:8px 16px;border-bottom:1px solid var(--caption_light);}
- .story-route .story-eyebrow,.story-route p {display:none;}
+@media(max-width:1279px){
+ .story-journey {display:flex;flex-direction:column;gap:0;}
+ .story-route {order:-1;top:64px;z-index:5;background:var(--base);width:100%;margin:0 0 32px;padding:8px 0;}
  .story-route strong {font-size:13px;margin:0;}
- .story-route svg {height:62px;width:100%;}
+ .story-route svg {height:50px;width:100%;}
  .story-route .route-desktop {display:none;}
  .story-route .route-compact {display:block;}
- .route-percent {float:right;}
- .story-gallery {gap:8px;margin:24px -8px;}
- .story-gallery .story-photo {min-width:0;}
- .story-chapters section {margin-bottom:64px;}
  .summerside section {scroll-margin-top:170px;}
 }
-@media(max-height:500px) and (min-width:701px){.story-route svg{max-height:24vh}.story-route .route-explainer{display:none}}
+@media(max-width:600px){
+ .story-route {top:64px;}
+ .story-overview svg {max-height:340px;}
+ .story-gallery {gap:8px;margin:24px -8px;}
+ .story-gallery .story-photo {min-width:0;}
+ .story-journey {margin-top:48px;}
+ .story-photo figcaption {font-size:12px;line-height:16px;}
+}
 .photo-viewer-open {overflow:hidden;}
 .photo-viewer {position:fixed;inset:0;margin:auto;width:min(1200px,96vw);height:92dvh;max-height:92dvh;padding:20px;border:0;background:white;color:var(--constant_black);}
 .photo-viewer[open] {display:flex;flex-direction:column;gap:16px;}

@@ -11,6 +11,10 @@ test('homepage project opens the complete article and city navigation',async({pa
   await expect(page.locator('[data-photo-id]')).toHaveCount(199);
   await page.getByRole('link',{name:'Stockholm',exact:true}).click();
   await expect(page).toHaveURL(/#stockholm$/);
+  const breadcrumb=page.getByRole('navigation',{name:'Breadcrumb'}).getByRole('link',{name:'Across Europe by bicycle',exact:true});
+  await expect(breadcrumb).toBeVisible();
+  await breadcrumb.click();
+  await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
   await page.getByText('Full packing list',{exact:true}).click();
   await expect(page.getByText('Electronics',{exact:true})).toBeVisible();
 });

@@ -90,3 +90,7 @@ Independent builder check completed: no material ambiguity blocks implementation
 Before implementation: review this design and its builder-proposed URL, homepage placement, image viewer, and delivery separation; then produce a task-level implementation plan.
 
 Before final asset migration: locate the originals, confirm old-ID mapping, and decide the stable public asset destination. Before publication: author reviews translation and historical notes; complete technical checks and review; obtain publication authorization. Neither originals nor VPS access is needed to plan or build the first local article slice.
+
+## Article alignment refinement
+
+User requested alignment with Pavel's `sikorsky.design/autoload/` and `/ugc/` after reviewing the first implementation. Use their existing shared `@sikorsky/site` typography, lists, links, metadata, section rhythm and 893px outer article container. Add the title ID expected by the shared scroll breadcrumb. Remove the contents row, repeated chapter eyebrows, progress percentage and route instructions. Keep original prose, photographs, red routes, overview, and viewer. Place the 160px route beside the standard article column at >=1280px and use a compact sticky strip below that width. This supersedes earlier bespoke typography and map-card treatment.

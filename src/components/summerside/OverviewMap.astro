@@ -5,9 +5,9 @@ import type {RouteStage} from '../../lib/summerside/types';
 const map=buildOverviewGeometry(routes as RouteStage[]);
 ---
 <section class="story-overview" id="overview" aria-labelledby="overview-title">
- <div><span class="story-eyebrow">Two stages, one summer</span><h2 id="overview-title">The long way round.</h2>
- <p>01 &nbsp; Kaliningrad → Amsterdam<br/>02 &nbsp; Copenhagen → Stockholm</p>
- <p class="map-legend"><span aria-hidden="true">━━</span> Cycling routes<br/>Amsterdam → Copenhagen by bus</p></div>
+ <div><h2 id="overview-title">The route</h2>
+ <p>Kaliningrad → Amsterdam<br/>Copenhagen → Stockholm</p>
+ <p class="caption">Amsterdam → Copenhagen by bus</p></div>
  <svg viewBox={map.viewBox} role="img" aria-label="Two cycling stages across Europe">
   <g class="map-land">{map.land.map(d=><path d={d!}/>)}</g>
   <g class="map-tracks">{map.paths.map(d=><path d={d}/>)}</g>
