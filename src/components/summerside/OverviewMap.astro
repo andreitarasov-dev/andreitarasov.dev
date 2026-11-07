@@ -4,13 +4,10 @@ import routes from '../../content/summerside/routes.json';
 import type {RouteStage} from '../../lib/summerside/types';
 const map=buildOverviewGeometry(routes as RouteStage[]);
 ---
-<section class="story-overview" id="overview" aria-labelledby="overview-title">
- <div><h2 id="overview-title">The route</h2>
- <p>Kaliningrad → Amsterdam<br/>Copenhagen → Stockholm</p>
- <p class="caption">Amsterdam → Copenhagen by bus</p></div>
+<div class="story-overview image full" id="overview">
  <svg viewBox={map.viewBox} role="img" aria-label="Two cycling stages across Europe">
   <g class="map-land">{map.land.map(d=><path d={d!}/>)}</g>
   <g class="map-tracks">{map.paths.map(d=><path d={d}/>)}</g>
-  {map.cities.map(({sectionId,label,x,y})=><a href={`#${sectionId}`} aria-label={label}><circle cx={x} cy={y} r="4"/><text x={x+8} y={y-10}>{label}</text></a>)}
+  {map.cities.map(({sectionId,label,x,y,dx,dy})=><a href={`#${sectionId}`} aria-label={label}><circle cx={x} cy={y} r="2.5"/><text x={x+dx} y={y+dy} text-anchor={dx<0?'end':'start'}>{label}</text></a>)}
  </svg>
-</section>
+</div>

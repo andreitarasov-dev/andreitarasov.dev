@@ -94,3 +94,9 @@ Before final asset migration: locate the originals, confirm old-ID mapping, and 
 ## Article alignment refinement
 
 User requested alignment with Pavel's `sikorsky.design/autoload/` and `/ugc/` after reviewing the first implementation. Use their existing shared `@sikorsky/site` typography, lists, links, metadata, section rhythm and 893px outer article container. Add the title ID expected by the shared scroll breadcrumb. Remove the contents row, repeated chapter eyebrows, progress percentage and route instructions. Keep original prose, photographs, red routes, overview, and viewer. Place the 160px route beside the standard article column at >=1280px and use a compact sticky strip below that width. This supersedes earlier bespoke typography and map-card treatment.
+
+## Section-by-section refinements
+
+User edits: metadata is “Summer 2018 · cycling, maps”; omit the introductory present-day note and overview heading/legend. The overview follows the subtitle directly, uses shared full-width image styling, 8px corners, near-white water, thinner routes, smaller city labels/dots, and additional city links. Preserve separately approved heatstroke/train notes. Update the previous-trip link to t-j.ru/work_exchange/ and render all packing categories as a visible standard list.
+
+The desktop scrolling widget now occupies a 280px rail within a wider journey layout. Its height is capped at 620px/70vh and centered vertically. Stage one runs Kaliningrad-to-Amsterdam top-to-bottom. Both stages restore the original RouteScroller city sets, including Magdeburg and Helsingborg, with small dots and quiet labels. Planar rotation preserves normalized path progress. Compact layouts use a wider horizontal projection and staggered labels.

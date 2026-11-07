@@ -20,10 +20,9 @@ const end=sections.find(s=>s.id==='end')!;
 <Layout title="Across Europe by bicycle" description="Our 2018 cycling journey across Europe: two stages, over 2,000 km, and 24 days in the saddle.">
  <article class="summerside" data-story>
   <header class="story-header" id="top">
-   <div class="metadata"><time datetime="2018">Summer 2018</time><span> · Cycling across Europe</span></div>
+   <div class="metadata"><time datetime="2018">Summer 2018</time><span> · cycling, maps</span></div>
    <h1 id="title">Across Europe by bicycle</h1>
    <h2>Two stages. 2,000 km. 24 days of riding.</h2>
-   <p class="story-note">A note from today · This is the story we wrote after our trip in 2018, translated into English and brought over from my old website.</p>
   </header>
   <OverviewMap/>
   <div class="story-prose">{before.map(section=><section id={section.id}><h2>{section.title}</h2><StoryBlocks section={section}/>{section.id==='intro'&&<StoryPhoto photo={byId.get('intro')!}/>}</section>)}</div>
@@ -47,4 +46,11 @@ const end=sections.find(s=>s.id==='end')!;
  import {initPhotoViewer} from '../../scripts/summerside-viewer';
  const root=document.querySelector<HTMLElement>('[data-story]');
  if(root) {initStoryRoute(root);initPhotoViewer(root);}
+ // WebKit can interrupt a smooth scroll across this exceptionally long article.
+ // Keep the shared breadcrumb's normal animation for short distances.
+ document.querySelector('.breadcrumbs .current-page')?.addEventListener('click',(event)=>{
+  if(scrollY<=innerHeight*10)return;
+  event.preventDefault();event.stopImmediatePropagation();
+  window.scrollTo({top:0,behavior:'instant'});
+ },{capture:true});
 </script>

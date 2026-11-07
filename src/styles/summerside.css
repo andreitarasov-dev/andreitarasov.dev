@@ -7,10 +7,11 @@ body:has(.summerside) :is(.content,.nav-content,footer) {min-width:0;}
 .story-note {font-size:14px;line-height:1.6;color:var(--caption_dark);max-width:620px;margin-top:24px;}
 .summerside .editorial-note {margin:24px 0;}
 .summerside .editorial-note p {font-size:14px;line-height:1.6;margin:8px 0 0;}
-.story-overview svg {display:block;width:100%;height:auto;max-height:480px;overflow:hidden;}
+.story-overview {border-radius:8px;background:#fafaf9;overflow:hidden;}
+.story-overview svg {display:block;width:100%;height:auto;overflow:hidden;}
 .map-land {fill:var(--background_dark);stroke:white;stroke-width:.7;}
-.map-tracks {fill:none;stroke:var(--story-accent);stroke-width:2.5;stroke-linejoin:round;}
-.story-overview svg text {font-size:13px;fill:var(--constant_black);}
+.map-tracks {fill:none;stroke:var(--story-accent);stroke-width:1.6;stroke-linejoin:round;}
+.story-overview svg text {font-size:10px;fill:var(--constant_black);}
 .story-overview svg circle {fill:var(--constant_black);}
 .story-photo {margin:32px 0;}
 .story-photo a {display:block;}
@@ -20,33 +21,34 @@ body:has(.summerside) :is(.content,.nav-content,footer) {min-width:0;}
 .story-gallery .story-photo {margin:0;}
 .story-gallery .story-photo:first-child {grid-column:1/-1;}
 .equipment-photos {display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.story-journey {position:relative;display:grid;grid-template-columns:minmax(0,1fr);margin-top:64.5px;}
+.story-journey {position:relative;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:64px;margin-top:64.5px;width:min(1184px,calc(100vw - 64px));left:50%;transform:translateX(-50%);}
 .story-chapters {grid-column:1;grid-row:1;min-width:0;}
 .story-chapters section:first-child {margin-top:0;}
-.story-route {grid-column:1;grid-row:1;align-self:start;position:sticky;top:64px;width:160px;margin-left:calc(100% + 24px);}
+.story-route {--route-height:min(70vh,620px);grid-column:2;grid-row:1;align-self:start;position:sticky;top:calc(50vh - var(--route-height)/2);width:280px;height:var(--route-height);}
 .story-route strong {display:block;font-size:14px;font-weight:var(--font-weight-medium);margin-bottom:12px;}
-.story-route svg {width:100%;height:auto;max-height:40vh;}
+@media(min-width:1280px){.story-route > strong {position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}}
+.story-route svg {width:100%;height:var(--route-height);overflow:visible;}
+.route-city circle {fill:var(--constant_black);stroke:var(--base);stroke-width:1;}
+.route-city text {font-size:12px;fill:var(--caption_dark);paint-order:stroke;stroke:var(--base);stroke-width:3px;stroke-linejoin:round;}
+.route-city:hover text {fill:var(--constant_black);}
 .story-route .route-compact {display:none;}
-.route-base {fill:none;stroke:var(--caption_light);stroke-width:2;}
-.route-progress {fill:none;stroke:var(--story-accent);stroke-width:3;stroke-linejoin:round;}
+.route-base {fill:none;stroke:var(--caption_light);stroke-width:1;}
+.route-progress {fill:none;stroke:var(--story-accent);stroke-width:1.6;stroke-linejoin:round;}
 .route-marker {fill:var(--story-accent);stroke:white;stroke-width:2;}
 .story-route [hidden] {display:none!important;}
 .story-transfer {font-size:14px;color:var(--caption_dark);}
-.summerside details {margin:32px 0;}
-.summerside summary {cursor:pointer;font-weight:var(--font-weight-strong);}
-.summerside details[open] summary {margin-bottom:24px;}
 @media(max-width:1279px){
- .story-journey {display:flex;flex-direction:column;gap:0;}
- .story-route {order:-1;top:64px;z-index:5;background:var(--base);width:100%;margin:0 0 32px;padding:8px 0;}
+ .story-journey {display:flex;flex-direction:column;gap:0;width:100%;left:auto;transform:none;}
+ .story-route {order:-1;top:64px;z-index:5;background:var(--base);width:calc(100% + 32px);height:auto;margin:0 -16px 32px;padding:8px 16px;}
  .story-route strong {font-size:13px;margin:0;}
- .story-route svg {height:50px;width:100%;}
+ .story-route svg {height:88px;width:100%;}
+ .route-city text {font-size:16px;}
  .story-route .route-desktop {display:none;}
  .story-route .route-compact {display:block;}
- .summerside section {scroll-margin-top:170px;}
+ .summerside section {scroll-margin-top:210px;}
 }
 @media(max-width:600px){
  .story-route {top:64px;}
- .story-overview svg {max-height:340px;}
  .story-gallery {gap:8px;margin:24px -8px;}
  .story-gallery .story-photo {min-width:0;}
  .story-journey {margin-top:48px;}

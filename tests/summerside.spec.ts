@@ -9,14 +9,15 @@ test('homepage project opens the complete article and city navigation',async({pa
   await expect(page.locator('h1')).toHaveText('Across Europe by bicycle');
   await expect(page.locator('[data-story-section]')).toHaveCount(14);
   await expect(page.locator('[data-photo-id]')).toHaveCount(199);
-  await page.getByRole('link',{name:'Stockholm',exact:true}).click();
+  await page.locator('#overview').getByRole('link',{name:'Stockholm',exact:true}).click();
   await expect(page).toHaveURL(/#stockholm$/);
   const breadcrumb=page.getByRole('navigation',{name:'Breadcrumb'}).getByRole('link',{name:'Across Europe by bicycle',exact:true});
   await expect(breadcrumb).toBeVisible();
   await breadcrumb.click();
   await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
-  await page.getByText('Full packing list',{exact:true}).click();
-  await expect(page.getByText('Electronics',{exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Full packing list',exact:true})).toBeVisible();
+  await expect(page.locator('#get li').filter({hasText:'Electronics.'})).toBeVisible();
+  await expect(page.locator('#get details')).toHaveCount(0);
 });
 test('photo viewer opens only on request, supports navigation and restores focus',async({page})=>{
  const fullRequests:string[]=[];
@@ -66,4 +67,24 @@ test('article and overview remain useful without JavaScript',async({browser})=>{
  await page.goto('/summerside/');await expect(page.locator('h1')).toBeVisible();
  await expect(page.getByRole('img',{name:'Two cycling stages across Europe'})).toBeVisible();
  await expect(page.locator('#end')).toContainText('44 days');await context.close();
+});
+
+test('desktop route is centered, ordered top to bottom, and shows original cities',async({page})=>{
+ await page.setViewportSize({width:1440,height:900});
+ await page.goto('/summerside/#berlin');
+ const route=page.locator('[data-story-route]');
+ await expect(route).toHaveAttribute('data-current-stage','1');
+ const svg=route.locator('[data-stage="1"] .route-desktop');
+ await expect(svg.locator('.route-city')).toHaveCount(7);
+ const start=await svg.getByRole('link',{name:'Kaliningrad',exact:true}).boundingBox();
+ const finish=await svg.getByRole('link',{name:'Amsterdam',exact:true}).boundingBox();
+ expect(start!.y).toBeLessThan(finish!.y);
+ expect(finish!.y-start!.y).toBeGreaterThan(350);
+ const box=await route.boundingBox();
+ expect(Math.abs(box!.y+box!.height/2-450)).toBeLessThan(3);
+ await page.evaluate(()=>document.getElementById('jonkoping')!.scrollIntoView());
+ await expect(route).toHaveAttribute('data-current-stage','2');
+ const second=route.locator('[data-stage="2"] .route-desktop');
+ await expect(second.locator('.route-city')).toHaveCount(5);
+ await expect(second.getByRole('link',{name:'Helsingborg',exact:true})).toBeVisible();
 });
