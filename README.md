@@ -60,3 +60,33 @@ The theme owns shared layout/styles; this repository owns content and deliberate
 To roll back a theme update, revert the dependency-update commit (both `package.json`
 and `package-lock.json`), run the build/tests, and redeploy the previous dependency version.
 Do not delete or overwrite a published npm version.
+
+## Cycling article and photographs
+
+The English draft lives in `src/content/summerside/article.en.json`; the rendered
+article is `/summerside/`. The source inventory and original Russian text are kept
+alongside it for comparison. Current photo URLs are temporary legacy previews.
+
+After collecting originals, create a JSON object mapping every ID in
+`src/content/summerside/media.json` to a relative filename under the originals folder
+(including `intro`, `packed-bicycles`, `verenti`, and `kona`). Then run with Node 22:
+
+```sh
+node scripts/export-summerside-media.mjs \
+  --input /path/to/originals \
+  --mapping /path/to/photo-mapping.json \
+  --output /path/to/new-export-directory \
+  --base-url https://photos.example.com/summerside/
+node --test tests/media-export.test.mjs
+```
+
+The output directory must not exist. The exporter leaves originals untouched,
+normalizes orientation, strips metadata, and writes AVIF/WebP/JPEG derivatives up
+to 1600 pixels wide without enlargement. Hashed filenames support immutable caching.
+It also writes a candidate `media.json`; it does not upload files or replace the
+site manifest. Upload the generated images to static hosting, verify URLs and
+image quality, then replace the site manifest with the candidate and rebuild/test.
+Immich remains the private archive; the public article needs no Immich API access.
+
+Before publication: author review of English, photo-specific alt text, asset URL
+verification, and map-data attribution. See `docs/superpowers/summerside-migration-audit.md`.

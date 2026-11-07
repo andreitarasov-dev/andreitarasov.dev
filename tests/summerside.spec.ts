@@ -44,7 +44,7 @@ test('scroll interpolates both ways, updates deep links, and keeps stages separa
 });
 test('reduced motion shows complete route and missing image leaves viewer controls usable',async({page})=>{
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/summerside/#berlin');
- await expect(page.locator('[data-stage="1"] [data-route-path]')).toHaveCSS('stroke-dashoffset','0px');
+ await expect(page.locator('[data-stage="1"] [data-route-path]:visible')).toHaveCSS('stroke-dashoffset','0px');
  await page.route('**/*_h.jpg',r=>r.abort());
  await page.locator('[data-photo-id="42823041980"] a').click();
  await expect(page.getByText('This photograph could not be loaded.')).toBeVisible();

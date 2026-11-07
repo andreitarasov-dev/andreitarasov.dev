@@ -19,11 +19,12 @@ export function decodeRoute(topology: Topology): [number,number][] {
   return coordinates;
 }
 
-export function buildStageGeometry(stage: RouteStage) {
+export function buildStageGeometry(stage: RouteStage, compact=false) {
   const line: LineString = {type:'LineString',coordinates:stage.coordinates};
-  const projection = geoMercator().fitExtent([[25,35],[295,265]], line);
+  const projection = geoMercator().angle(compact ? (stage.id===2 ? 65 : 0) : (stage.id===1 ? -55 : 0))
+    .fitExtent(compact ? [[12,12],[628,88]] : [[25,35],[295,265]], line);
   const path = geoPath(projection)(line)!;
-  return {path,viewBox:'0 0 320 300'};
+  return {path,viewBox:compact?'0 0 640 100':'0 0 320 300'};
 }
 
 export function buildOverviewGeometry(stages: RouteStage[]) {

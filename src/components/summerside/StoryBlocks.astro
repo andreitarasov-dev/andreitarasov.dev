@@ -5,7 +5,9 @@ import type {StorySection,StoryPhoto as Photo} from '../../lib/summerside/types'
 interface Props {section:StorySection}
 const {section}=Astro.props;
 const photos=media as Photo[];
-const placeholder=/<div data-(equipment-photos|packed-bicycles-photo)><\/div>/g;
-const pieces=section.html.split(placeholder);
+const placeholder=/<div data-(equipment-photos|packed-bicycles-photo|heat-note|train-note)><\/div>/g;
+const html=section.html.replace('<p>On the very first day, Alyona got heatstroke.', '<div data-heat-note></div><p>On the very first day, Alyona got heatstroke.')
+ .replace('<p>To take the bikes on the train,', '<div data-train-note></div><p>To take the bikes on the train,');
+const pieces=html.split(placeholder);
 ---
-{pieces.map((piece)=>piece==='equipment-photos'?<div class="equipment-photos">{['verenti','kona'].map(id=><StoryPhoto photo={photos.find(p=>p.id===id)!}/>)}</div>:piece==='packed-bicycles-photo'?<StoryPhoto photo={photos.find(p=>p.id==='packed-bicycles')!}/>:<Fragment set:html={piece}/>)}
+{pieces.map((piece)=>piece==='equipment-photos'?<div class="equipment-photos">{['verenti','kona'].map(id=><StoryPhoto photo={photos.find(p=>p.id===id)!}/>)}</div>:piece==='packed-bicycles-photo'?<StoryPhoto photo={photos.find(p=>p.id==='packed-bicycles')!}/>:piece==='heat-note'?<aside class="story-note editorial-note"><strong>Present-day note</strong><p>The next paragraph preserves what we wrote in 2018, including incorrect advice about heatstroke. Heatstroke is a medical emergency: seek immediate medical help and start cooling the person. Sleeping it off is not appropriate treatment. See the <a href="https://www.nhs.uk/conditions/heat-exhaustion-heatstroke/">NHS guidance on heat exhaustion and heatstroke</a>.</p></aside>:piece==='train-note'?<aside class="story-note editorial-note"><strong>Present-day note</strong><p>This describes our train journey in 2018. It is not a statement of current carriage rules. Check the operator’s current bicycle and luggage requirements for your particular service before travelling.</p></aside>:<Fragment set:html={piece}/>)}

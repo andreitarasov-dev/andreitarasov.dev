@@ -24,3 +24,15 @@ test('route conversion preserves multiple and reversed topology arcs', async () 
   expect(decodeRoute({type:'Topology',objects:{route:{type:'LineString',arcs:[0,-2]}},arcs:[[[0,0],[1,1]],[[2,2],[1,1]]]} as any))
     .toEqual([[0,0],[1,1],[2,2]]);
 });
+
+test('English draft preserves section associations and original prose links', () => {
+  const inventory = JSON.parse(readFileSync(join(folder, 'inventory.json'), 'utf8'));
+  const article = JSON.parse(readFileSync(join(folder, 'article.en.json'), 'utf8'));
+  const source = readFileSync(join(folder, 'source/index.ru.txt'), 'utf8');
+  expect(article.map((s: {id:string}) => s.id)).toEqual(inventory.sections);
+  for (const city of inventory.cities) {
+    expect(article.find((s: {id:string}) => s.id === city.sectionId)).toMatchObject({photoId:city.photoId,stage:city.stage});
+  }
+  const links = (html:string) => [...html.matchAll(/href="([^"]+)"/g)].map(m=>m[1].replaceAll('&amp;', '&')).sort();
+  expect(links(article.map((s: {html:string}) => s.html).join(''))).toEqual(links(source));
+});

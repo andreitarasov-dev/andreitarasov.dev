@@ -16,11 +16,12 @@ export function initStoryRoute(root:HTMLElement):()=>void {
   route.querySelector<HTMLElement>('[data-route-percent]')!.textContent=motion.matches?'':`${Math.round(state.progress*100)}%`;
   route.querySelectorAll<HTMLElement>('[data-stage]').forEach(stage=>{
     stage.hidden=Number(stage.dataset.stage)!==state.stage;
-    const path=stage.querySelector<SVGPathElement>('[data-route-path]')!;
+    stage.querySelectorAll<SVGPathElement>('[data-route-path]').forEach(path=>{
     path.style.strokeDasharray='1';path.style.strokeDashoffset=String(motion.matches?0:1-state.progress);
-    const marker=stage.querySelector<SVGCircleElement>('[data-route-marker]')!;
+    const marker=path.parentElement!.querySelector<SVGCircleElement>('[data-route-marker]')!;
     marker.style.display=motion.matches?'none':'';
     if(!stage.hidden&&!motion.matches){const point=path.getPointAtLength(path.getTotalLength()*state.progress);marker.setAttribute('cx',String(point.x));marker.setAttribute('cy',String(point.y));}
+    });
   });
  };
  const schedule=()=>{if(!frame)frame=requestAnimationFrame(update);};
