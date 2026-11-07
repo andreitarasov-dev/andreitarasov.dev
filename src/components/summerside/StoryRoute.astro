@@ -1,0 +1,18 @@
+---
+import {buildStageGeometry} from '../../lib/summerside/geometry';
+import routes from '../../content/summerside/routes.json';
+import type {RouteStage} from '../../lib/summerside/types';
+const stages=routes as RouteStage[];
+---
+<aside class="story-route" data-story-route aria-label="Journey progress">
+ <span class="story-eyebrow">Following the journey</span>
+ <strong data-route-label>Kaliningrad → Amsterdam</strong>
+ <span class="route-percent" data-route-percent aria-hidden="true"></span>
+ {stages.map(stage=>{const geometry=buildStageGeometry(stage);return <div data-stage={stage.id}>
+  <svg viewBox={geometry.viewBox} role="img" aria-label={stage.id===1?'Stage 1: Kaliningrad to Amsterdam':'Stage 2: Copenhagen to Stockholm'}>
+   <path class="route-base" d={geometry.path}/><path class="route-progress" data-route-path pathLength="1" d={geometry.path}/><circle data-route-marker r="5" class="route-marker" style="display:none"/>
+  </svg>
+  <p>{stage.id===1?'Kaliningrad → Amsterdam':'Copenhagen → Stockholm'}</p>
+ </div>})}
+ <p class="route-explainer">Scroll to follow the story.</p>
+</aside>

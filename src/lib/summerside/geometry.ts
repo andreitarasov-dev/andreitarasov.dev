@@ -1,7 +1,7 @@
 import { feature } from 'topojson-client';
 import { geoMercator, geoPath } from 'd3-geo';
 import type { Topology } from 'topojson-specification';
-import type { LineString, Feature, FeatureCollection, Geometry } from 'geojson';
+import type { LineString, FeatureCollection, Geometry } from 'geojson';
 import type { RouteStage } from './types';
 import land from '../../content/summerside/source/route_map.json' with { type: 'json' };
 

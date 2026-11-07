@@ -1,0 +1,48 @@
+---
+import Layout from '@sikorsky/site/components/Layout.astro';
+import OverviewMap from '../../components/summerside/OverviewMap.astro';
+import StoryRoute from '../../components/summerside/StoryRoute.astro';
+import StoryPhoto from '../../components/summerside/StoryPhoto.astro';
+import StoryBlocks from '../../components/summerside/StoryBlocks.astro';
+import article from '../../content/summerside/article.en.json';
+import media from '../../content/summerside/media.json';
+import inventory from '../../content/summerside/inventory.json';
+import type {StorySection,StoryPhoto as Photo} from '../../lib/summerside/types';
+import '../../styles/summerside.css';
+const sections=article as StorySection[],photos=media as Photo[];
+const cities=sections.filter(s=>s.stage);
+const byId=new Map(photos.map(p=>[p.id,p]));
+const gallery=inventory.photoIds;
+const before=sections.filter(s=>!s.stage&&s.id!=='end');
+const end=sections.find(s=>s.id==='end')!;
+---
+<Layout title="Across Europe by bicycle" description="Our 2018 cycling journey across Europe: two stages, over 2,000 km, and 24 days in the saddle.">
+ <article class="summerside" data-story>
+  <header class="story-header" id="top">
+   <span class="story-eyebrow">Summerside · Summer 2018</span>
+   <h1>Across Europe<br/> by bicycle</h1>
+   <p class="story-subtitle">Two stages. 2,000 km. 24 days of riding.</p>
+   <p class="story-note">A note from today · This is the story we wrote after our trip in 2018, translated into English and brought over from my old website.</p>
+   <nav class="story-toc" aria-label="Article chapters"><a href="#overview">The route</a><a href="#intro">Who we are</a><a href="#why">Getting ready</a><a href="#get">Our gear</a><a href="#kaliningrad">On the road ↓</a><a href="#end">Looking back</a></nav>
+  </header>
+  <OverviewMap/>
+  <div class="story-prose">{before.map(section=><section id={section.id}><h2>{section.title}</h2><StoryBlocks section={section}/>{section.id==='intro'&&<StoryPhoto photo={byId.get('intro')!}/>}</section>)}</div>
+  <div class="story-journey">
+   <StoryRoute/>
+   <div class="story-chapters">{cities.map((section,i)=>{
+     const start=gallery.indexOf(section.photoId!);const next=cities[i+1];const finish=next?gallery.indexOf(next.photoId!):gallery.length;
+     return <section id={section.id} data-story-section data-anchor-stage={section.stage} data-anchor-progress={section.progress} data-anchor-label={section.title}>
+      {section.id==='copenhagen'&&<p class="story-transfer">Stage 02 · After the bus journey from Amsterdam</p>}
+      <span class="story-eyebrow">{String(i+1).padStart(2,'0')} / On the road</span><h2>{section.title}</h2><StoryBlocks section={section}/>
+      <div class="story-gallery">{gallery.slice(start,finish).map(id=><StoryPhoto photo={byId.get(id)!}/>)}</div>
+     </section>;
+   })}</div>
+  </div>
+  <section class="story-prose" id="end"><h2>{end.title}</h2><StoryBlocks section={end}/><a href="#top" class="link">Back to the beginning ↑</a></section>
+ </article>
+</Layout>
+<script>
+ import {initStoryRoute} from '../../scripts/summerside-route';
+ const root=document.querySelector<HTMLElement>('[data-story]');
+ if(root) initStoryRoute(root);
+</script>

@@ -1,0 +1,11 @@
+---
+import StoryPhoto from './StoryPhoto.astro';
+import media from '../../content/summerside/media.json';
+import type {StorySection,StoryPhoto as Photo} from '../../lib/summerside/types';
+interface Props {section:StorySection}
+const {section}=Astro.props;
+const photos=media as Photo[];
+const placeholder=/<div data-(equipment-photos|packed-bicycles-photo)><\/div>/g;
+const pieces=section.html.split(placeholder);
+---
+{pieces.map((piece)=>piece==='equipment-photos'?<div class="equipment-photos">{['verenti','kona'].map(id=><StoryPhoto photo={photos.find(p=>p.id===id)!}/>)}</div>:piece==='packed-bicycles-photo'?<StoryPhoto photo={photos.find(p=>p.id==='packed-bicycles')!}/>:<Fragment set:html={piece}/>)}
