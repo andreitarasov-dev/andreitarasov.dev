@@ -9,3 +9,14 @@
   for = "/summerside/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+# Public Firebase web-app configuration, embedded in the client bundle.
+# Database access is governed by Firebase rules, not secrecy of these values.
+[build.environment]
+  PUBLIC_FIREBASE_API_KEY = "AIzaSyDWIBqUwIRlcjVApzlNCgHSrKbd1RTRRTc"
+  PUBLIC_FIREBASE_AUTH_DOMAIN = "andreitarasov-dev.firebaseapp.com"
+  PUBLIC_FIREBASE_DATABASE_URL = "https://andreitarasov-dev-default-rtdb.europe-west1.firebasedatabase.app/"
+  PUBLIC_FIREBASE_PROJECT_ID = "andreitarasov-dev"
+  PUBLIC_FIREBASE_STORAGE_BUCKET = "andreitarasov-dev.firebasestorage.app"
+  PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "726758916662"
+  PUBLIC_FIREBASE_APP_ID = "1:726758916662:web:5afa1a48c002ba1213ce97"
