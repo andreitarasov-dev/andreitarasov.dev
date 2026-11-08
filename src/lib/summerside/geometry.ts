@@ -38,7 +38,7 @@ export function buildStageGeometry(stage: RouteStage, compact=false) {
   const cities=locations.map(([label,lon,lat,sectionId],i)=>{
     const [x,y]=projection([lon,lat])!;
     const left=compact ? false : (stage.id===1 ? i%2===1 : i===1 || i===2);
-    return {label,sectionId,x,y,dx:compact?0:left?-9:9,dy:compact?(i%2===0?20:132)-y:4,align:compact?'middle':left?'end':'start'};
+    return {label,sectionId,x,y,dx:compact?0:left?-9:9,dy:compact?(i%2===0?-20:24):4,align:compact?'middle':left?'end':'start'};
   });
   return {path,cities,viewBox:compact?'0 0 640 140':'0 0 280 600'};
 }

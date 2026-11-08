@@ -53,7 +53,7 @@ test('scroll interpolates both ways, updates deep links, and keeps stages separa
 });
 test('reduced motion and failed photos leave inline navigation usable',async({page})=>{
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/summerside/#berlin');
- await expect(page.locator('[data-stage="1"] [data-route-path]:visible')).toHaveCSS('stroke-dashoffset','0px');
+ await expect.poll(()=>page.locator('[data-stage="1"] svg:visible').evaluate(svg=>svg.querySelector('[data-route-path]')!.getAttribute('d')===svg.querySelector('.route-base')!.getAttribute('d'))).toBe(true);
  await page.route('**/43723828875_355d1d63b0_h.jpg',r=>r.abort());
  const gallery=page.locator('#kaliningrad [data-gallery]');
  await gallery.locator('[data-gallery-thumb]').nth(1).click();
@@ -144,3 +144,22 @@ test('article uses the shared like and copy-share footer',async({page})=>{
  await page.locator('#copy-link').click();
  await expect.poll(()=>page.evaluate(()=>(window as any).__copied)).toBe('andreitarasov.dev/summerside/');
 });
+
+ test('compact route reveals one continuous prefix and labels stay beside their dots',async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('/summerside/#malbork');
+  await expect(page.locator('[data-story-route]')).toHaveAttribute('data-current-stage','1');
+  for(const section of ['malbork','berlin','jonkoping']){
+   await page.evaluate(id=>document.getElementById(id)!.scrollIntoView(),section);
+   await expect.poll(()=>page.locator('[data-stage]:visible .route-compact').evaluate(svg=>{
+    const full=svg.querySelector('.route-base')!.getAttribute('d')!;
+    const revealed=svg.querySelector('[data-route-path]')!.getAttribute('d')!;
+    return revealed!==full && full.startsWith(revealed.slice(0,revealed.lastIndexOf('L')));
+   })).toBe(true);
+   const svg=page.locator('[data-stage]:visible .route-compact');
+   expect(await svg.locator('.route-city').evaluateAll(cities=>cities.every(city=>{
+    const dot=city.querySelector('circle')!,label=city.querySelector('text')!;
+    return Math.abs(Number(dot.getAttribute('cx'))-Number(label.getAttribute('x')))<=1 && Math.abs(Number(dot.getAttribute('cy'))-Number(label.getAttribute('y')))<=24;
+   }))).toBe(true);
+  }
+ });

@@ -10,6 +10,14 @@ export function initStoryRoute(root:HTMLElement):()=>void {
  syncHeader();
  const sections=[...root.querySelectorAll<HTMLElement>('[data-story-section]')];
  const motion=matchMedia('(prefers-reduced-motion: reduce)');
+ // The generated Mercator paths contain only M/L commands. Reveal a prefix
+ // directly instead of SVG dashes, which fragment these dense paths in WebKit.
+ const paths=new Map([...route.querySelectorAll<SVGPathElement>('[data-route-path]')].map(path=>{
+  const points=path.getAttribute('d')!.slice(1).split('L').map(pair=>pair.split(',').map(Number));
+  let total=0;
+  const distances=points.map((point,i)=>{if(i)total+=Math.hypot(point[0]-points[i-1][0],point[1]-points[i-1][1]);return total;});
+  return [path,{points,distances,total,full:path.getAttribute('d')!}] as const;
+ }));
  let frame=0;
  const update=()=>{
   frame=0;
@@ -22,10 +30,16 @@ export function initStoryRoute(root:HTMLElement):()=>void {
   route.querySelectorAll<HTMLElement>('[data-stage]').forEach(stage=>{
     stage.hidden=Number(stage.dataset.stage)!==state.stage;
     stage.querySelectorAll<SVGPathElement>('[data-route-path]').forEach(path=>{
-    path.style.strokeDasharray='1';path.style.strokeDashoffset=String(motion.matches?0:1-state.progress);
+    const {points,distances,total,full}=paths.get(path)!;
+    const target=total*state.progress;
+    let end=points.length-1;
+    for(let i=1;i<points.length;i++){if(distances[i]>=target){end=i;break;}}
+    const fraction=(target-distances[end-1])/(distances[end]-distances[end-1]||1);
+    const point=points[end].map((value,axis)=>points[end-1][axis]+(value-points[end-1][axis])*fraction);
+    path.setAttribute('d',motion.matches?full:`M${points.slice(0,end).map(p=>p.join(',')).join('L')}L${point.join(',')}`);
     const marker=path.parentElement!.querySelector<SVGCircleElement>('[data-route-marker]')!;
     marker.style.display=motion.matches?'none':'';
-    if(!stage.hidden&&!motion.matches){const point=path.getPointAtLength(path.getTotalLength()*state.progress);marker.setAttribute('cx',String(point.x));marker.setAttribute('cy',String(point.y));}
+    marker.setAttribute('cx',String(point[0]));marker.setAttribute('cy',String(point[1]));
     });
   });
  };

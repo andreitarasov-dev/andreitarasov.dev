@@ -9,7 +9,7 @@ const stages=routes as RouteStage[];
  <span data-route-percent hidden aria-hidden="true"></span>
  {stages.map(stage=><div data-stage={stage.id}>
   {[false,true].map(compact=>{const geometry=buildStageGeometry(stage,compact);return <svg class={compact?'route-compact':'route-desktop'} viewBox={geometry.viewBox} role="img" aria-label={stage.id===1?'Stage 1: Kaliningrad to Amsterdam':'Stage 2: Copenhagen to Stockholm'}>
-   <path class="route-base" d={geometry.path}/><path class="route-progress" data-route-path pathLength="1" d={geometry.path}/><circle data-route-marker r="3.5" class="route-marker" style="display:none"/>
+   <path class="route-base" d={geometry.path}/><path class="route-progress" data-route-path d={geometry.path}/><circle data-route-marker r="3.5" class="route-marker" style="display:none"/>
    {geometry.cities.map(city=><a href={`#${city.sectionId}`} aria-label={city.label} class="route-city">
     <circle cx={city.x} cy={city.y} r="2.5"/>
     <text x={city.x+city.dx} y={city.y+city.dy} text-anchor={city.align}>{city.label}</text>
