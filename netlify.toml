@@ -3,3 +3,9 @@
   publish = "dist"
 
 # Node is selected by .nvmrc, shared with local development and CI.
+
+# Direct-link review: keep the article out of search results until public launch.
+[[headers]]
+  for = "/summerside/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

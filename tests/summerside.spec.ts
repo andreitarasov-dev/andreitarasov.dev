@@ -2,9 +2,10 @@ import { test, expect } from '@playwright/test';
 import {mockImages} from './mockImages';
 
 test.beforeEach(async({page})=>{await mockImages(page);});
-test('homepage project opens the complete article and city navigation',async({page})=>{
+test('unlisted article opens directly with complete content and city navigation',async({page})=>{
   await page.goto('/');
-  await page.getByRole('link',{name:'Across Europe by bicycle',exact:true}).click();
+  await expect(page.getByRole('link',{name:'Across Europe by bicycle',exact:true})).toHaveCount(0);
+  await page.goto('/summerside/');
   await expect(page).toHaveURL(/\/summerside\/$/);
   await expect(page.locator('h1')).toHaveText('Across Europe by bicycle');
   await expect(page.locator('[data-story-section]')).toHaveCount(14);
@@ -31,9 +32,9 @@ test('inline gallery selects high resolution photos without opening a dialog',as
  await expect(thumbs.first()).toHaveAttribute('aria-pressed','false');
  await thumbs.nth(1).press('End');
  await expect(thumbs.last()).toBeFocused();
- await expect(gallery.locator('[data-gallery-next]')).toBeDisabled();
+ await expect(thumbs.last()).toHaveAttribute('aria-pressed','true');
  await thumbs.last().press('Home');
- await expect(gallery.locator('[data-gallery-previous]')).toBeDisabled();
+ await expect(thumbs.first()).toHaveAttribute('aria-pressed','true');
  await expect(page.locator('dialog')).toHaveCount(0);
  await expect(page.locator('[data-photo-open]')).toHaveCount(0);
 });
@@ -57,8 +58,8 @@ test('reduced motion and failed photos leave inline navigation usable',async({pa
  const gallery=page.locator('#kaliningrad [data-gallery]');
  await gallery.locator('[data-gallery-thumb]').nth(1).click();
  await expect(gallery.locator('[data-gallery-error]')).toBeVisible();
- await gallery.locator('[data-gallery-next]').click();
- await expect(gallery.locator('[data-gallery-counter]')).toHaveText('3 / 5');
+ await gallery.locator('[data-gallery-thumb]').nth(2).click();
+ await expect(gallery.locator('[data-gallery-thumb]').nth(2)).toHaveAttribute('aria-pressed','true');
 });
 for(const size of [{width:320,height:700},{width:390,height:844},{width:1280,height:900},{width:844,height:390}]){
  test(`article fits ${size.width}×${size.height}`,async({page})=>{
@@ -107,3 +108,39 @@ for(const width of [390,844]){
   })).toBeLessThan(1);
  });
 }
+
+test('preview strip reveals hidden photos in both directions without moving the page',async({page})=>{
+ // Isolate strip scrolling from late third-party image loads and font swaps.
+ await page.route(/staticflickr\.com|raw\.githubusercontent\.com/,route=>route.abort());
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/summerside/#malbork');
+ await page.evaluate(()=>document.fonts.ready);
+ const gallery=page.locator('#malbork [data-gallery]');
+ const strip=gallery.locator('[data-gallery-thumbnails]');
+ const thumbs=gallery.locator('[data-gallery-thumb]');
+ // Place the strip away from the sticky header before testing its own scrolling.
+ await strip.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
+ const pageY=await page.evaluate(()=>scrollY);
+ // Other gallery tests cover real pointer clicks. Dispatch here without
+ // Playwright's own scroll-into-view so we measure only gallery behavior.
+ await thumbs.nth(3).evaluate((button:HTMLButtonElement)=>button.click());
+ await expect.poll(()=>strip.evaluate(el=>el.scrollLeft)).toBeGreaterThan(50);
+ await expect(thumbs.nth(3)).toHaveAttribute('aria-pressed','true');
+ const right=await strip.evaluate(el=>el.scrollLeft);
+ await thumbs.nth(1).evaluate((button:HTMLButtonElement)=>button.click());
+ await expect.poll(()=>strip.evaluate(el=>el.scrollLeft)).toBeLessThan(right);
+ expect(Math.abs(await page.evaluate(()=>scrollY)-pageY)).toBeLessThan(2);
+ await expect(gallery.locator('[data-gallery-controls]')).toHaveCount(0);
+ await expect(gallery.locator('[data-gallery-counter]')).toHaveCount(0);
+});
+
+test('article uses the shared like and copy-share footer',async({page})=>{
+ await page.addInitScript(()=>{
+  Object.defineProperty(navigator,'clipboard',{value:{writeText:async(text:string)=>{(window as any).__copied=text;}}});
+ });
+ await page.goto('/summerside/');
+ await expect(page.locator('#likeButton')).toHaveAttribute('data-page-id','summerside');
+ await expect(page.getByText('Back to the beginning ↑',{exact:true})).toHaveCount(0);
+ await page.locator('#copy-link').click();
+ await expect.poll(()=>page.evaluate(()=>(window as any).__copied)).toBe('andreitarasov.dev/summerside/');
+});

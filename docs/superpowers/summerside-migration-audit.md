@@ -23,3 +23,7 @@ Independent final review: no actionable findings. Read-only review covered sourc
 Section review: applied user-requested metadata, intro/map simplification, full-width overview, smaller labels/dots, near-white water, corrected external link and always-visible packing list. Restored original widget city sets from pinned RouteScroller source; enlarged and vertically centered desktop widget with Kaliningrad above Amsterdam. Added regression checks for city counts, orientation and centering. Long-distance breadcrumb navigation uses an immediate jump to avoid WebKit interrupting smooth scrolling on the long photo article.
 
 Latest gallery revision removes all modal interactions. City galleries use a large main image with selectable previews and keyboard navigation; standalone images are static. Responsive derivative export remains compatible. Separate editorial notes have been consolidated into one archival note below the overview at the user’s request.
+
+## Direct-link review deployment — 2026-11-08
+
+User authorized deploying for friends to review before public launch. Remove the homepage project entry and restore its pre-article visual baseline. Keep `/summerside/` accessible directly with `X-Robots-Tag: noindex, nofollow` from Netlify. This is unlisted, not access-controlled. Legacy full-resolution images remain in use for this review; originals migration and final editorial/accessibility refinements remain follow-up work. Public launch should restore the homepage entry and remove the noindex header after review.

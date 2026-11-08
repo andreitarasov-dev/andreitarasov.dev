@@ -17,7 +17,7 @@ const gallery=inventory.photoIds;
 const before=sections.filter(s=>!s.stage&&s.id!=='end');
 const end=sections.find(s=>s.id==='end')!;
 ---
-<Layout title="Across Europe by bicycle" description="Our 2018 cycling journey across Europe: two stages, over 2,000 km, and 24 days in the saddle.">
+<Layout pageId="summerside" title="Across Europe by bicycle" description="Our 2018 cycling journey across Europe: two stages, over 2,000 km, and 24 days in the saddle.">
  <article class="summerside" data-story>
   <header class="story-header" id="top">
    <div class="metadata"><time datetime="2018">Summer 2018</time><span> · cycling, maps</span></div>
@@ -37,7 +37,7 @@ const end=sections.find(s=>s.id==='end')!;
      </section>;
    })}</div>
   </div>
-  <section class="story-prose" id="end"><h2>{end.title}</h2><StoryBlocks section={end}/><a href="#top" class="link">Back to the beginning ↑</a></section>
+  <section class="story-prose" id="end"><h2>{end.title}</h2><StoryBlocks section={end}/></section>
  </article>
 </Layout>
 <script>

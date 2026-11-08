@@ -13,11 +13,6 @@ const first=photos[0];
   </picture>
   <p data-gallery-error hidden role="status">This photograph could not be loaded. Try another preview.</p>
  </figure>
- <div class="gallery-controls" hidden data-gallery-controls>
-  <button type="button" data-gallery-previous aria-label={`Previous photograph in ${title}`} disabled>← Previous</button>
-  <span class="caption" data-gallery-counter aria-live="polite">1 / {photos.length}</span>
-  <button type="button" data-gallery-next aria-label={`Next photograph in ${title}`}>Next →</button>
- </div>
  <div class="gallery-thumbnails" data-gallery-thumbnails hidden role="group" aria-label={`Choose a photograph from ${title}`}>
   {photos.map((photo,i)=><button type="button" data-photo-id={photo.id} data-gallery-thumb data-full-url={photo.fullUrl} data-alt={photo.alt} data-sources={JSON.stringify(photo.sources)} aria-label={`Photograph ${i+1} of ${photos.length}: ${photo.alt}`} aria-pressed={i===0?'true':'false'} aria-controls={`gallery-${id}`}>
    <img src={photo.fallbackUrl} alt="" width={photo.width} height={photo.height} loading="lazy" decoding="async"/>
