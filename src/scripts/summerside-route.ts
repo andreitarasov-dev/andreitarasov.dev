@@ -3,6 +3,11 @@ import type {ProgressAnchor,StageId} from '../lib/summerside/types';
 export function initStoryRoute(root:HTMLElement):()=>void {
  const route=root.querySelector<HTMLElement>('[data-story-route]');
  if(!route) return ()=>{};
+ const header=document.querySelector<HTMLElement>('nav.header');
+ const syncHeader=()=>{if(header)route.style.setProperty('--story-header-height',`${header.getBoundingClientRect().height}px`);};
+ const headerObserver=new ResizeObserver(syncHeader);
+ if(header)headerObserver.observe(header);
+ syncHeader();
  const sections=[...root.querySelectorAll<HTMLElement>('[data-story-section]')];
  const motion=matchMedia('(prefers-reduced-motion: reduce)');
  let frame=0;
@@ -28,5 +33,5 @@ export function initStoryRoute(root:HTMLElement):()=>void {
  const observer=new ResizeObserver(schedule);observer.observe(root);
  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);addEventListener('pageshow',schedule);motion.addEventListener('change',schedule);root.addEventListener('load',schedule,true);
  document.fonts.ready.then(schedule);schedule();
- return ()=>{cancelAnimationFrame(frame);observer.disconnect();removeEventListener('scroll',schedule);removeEventListener('resize',schedule);removeEventListener('pageshow',schedule);motion.removeEventListener('change',schedule);root.removeEventListener('load',schedule,true);};
+ return ()=>{cancelAnimationFrame(frame);observer.disconnect();headerObserver.disconnect();removeEventListener('scroll',schedule);removeEventListener('resize',schedule);removeEventListener('pageshow',schedule);motion.removeEventListener('change',schedule);root.removeEventListener('load',schedule,true);};
 }

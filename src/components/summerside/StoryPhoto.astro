@@ -4,11 +4,9 @@ interface Props {photo:StoryPhoto; eager?:boolean}
 const {photo,eager=false}=Astro.props;
 ---
 <figure class="story-photo" data-photo-id={photo.id}>
-  <a href={photo.fullUrl} data-photo-open aria-label={`Enlarge: ${photo.alt}`}>
     <picture>
-      {photo.sources.map(source=><source type={source.type} srcset={source.srcset} sizes="(max-width: 700px) 100vw, 680px" />)}
-      <img src={photo.fallbackUrl} alt={photo.alt} width={photo.width} height={photo.height} loading={eager?'eager':'lazy'} decoding="async" />
+      {photo.sources.map(source=><source type={source.type} srcset={source.srcset} sizes="(max-width: 893px) 100vw, 840px" />)}
+      <img src={photo.fullUrl} alt={photo.alt} width={photo.width} height={photo.height} loading={eager?'eager':'lazy'} decoding="async" />
     </picture>
-  </a>
   {photo.caption && <figcaption>{photo.caption}</figcaption>}
 </figure>

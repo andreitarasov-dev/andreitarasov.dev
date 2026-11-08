@@ -4,7 +4,7 @@ import OverviewMap from '../../components/summerside/OverviewMap.astro';
 import StoryRoute from '../../components/summerside/StoryRoute.astro';
 import StoryPhoto from '../../components/summerside/StoryPhoto.astro';
 import StoryBlocks from '../../components/summerside/StoryBlocks.astro';
-import PhotoViewer from '../../components/summerside/PhotoViewer.astro';
+import StoryGallery from '../../components/summerside/StoryGallery.astro';
 import article from '../../content/summerside/article.en.json';
 import media from '../../content/summerside/media.json';
 import inventory from '../../content/summerside/inventory.json';
@@ -25,27 +25,26 @@ const end=sections.find(s=>s.id==='end')!;
    <h2>Two stages. 2,000 km. 24 days of riding.</h2>
   </header>
   <OverviewMap/>
+  <aside class="story-archive-note" aria-label="About this archive"><p class="caption secondary">This is our story from 2018, translated into English and kept here as a personal record. Some links may no longer work, and prices, places and transport rules may have changed. Our advice—including anything about health or safety—reflects what we believed then and may be outdated or incorrect. Please check current sources before using it to plan a trip.</p></aside>
   <div class="story-prose">{before.map(section=><section id={section.id}><h2>{section.title}</h2><StoryBlocks section={section}/>{section.id==='intro'&&<StoryPhoto photo={byId.get('intro')!}/>}</section>)}</div>
   <div class="story-journey">
    <StoryRoute/>
    <div class="story-chapters">{cities.map((section,i)=>{
      const start=gallery.indexOf(section.photoId!);const next=cities[i+1];const finish=next?gallery.indexOf(next.photoId!):gallery.length;
      return <section id={section.id} data-story-section data-anchor-stage={section.stage} data-anchor-progress={section.progress} data-anchor-label={section.title}>
-      {section.id==='copenhagen'&&<p class="story-transfer">Stage 02 · After the bus journey from Amsterdam</p>}
       <h2>{section.title}</h2><StoryBlocks section={section}/>
-      <div class="story-gallery">{gallery.slice(start,finish).map(id=><StoryPhoto photo={byId.get(id)!}/>)}</div>
+      <StoryGallery photos={gallery.slice(start,finish).map(id=>byId.get(id)!)} title={section.title} id={section.id}/>
      </section>;
    })}</div>
   </div>
   <section class="story-prose" id="end"><h2>{end.title}</h2><StoryBlocks section={end}/><a href="#top" class="link">Back to the beginning ↑</a></section>
-  <PhotoViewer/>
  </article>
 </Layout>
 <script>
  import {initStoryRoute} from '../../scripts/summerside-route';
- import {initPhotoViewer} from '../../scripts/summerside-viewer';
+ import {initStoryGalleries} from '../../scripts/summerside-gallery';
  const root=document.querySelector<HTMLElement>('[data-story]');
- if(root) {initStoryRoute(root);initPhotoViewer(root);}
+ if(root) {initStoryRoute(root);initStoryGalleries(root);}
  // WebKit can interrupt a smooth scroll across this exceptionally long article.
  // Keep the shared breadcrumb's normal animation for short distances.
  document.querySelector('.breadcrumbs .current-page')?.addEventListener('click',(event)=>{

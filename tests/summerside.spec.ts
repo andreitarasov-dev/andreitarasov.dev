@@ -19,20 +19,23 @@ test('homepage project opens the complete article and city navigation',async({pa
   await expect(page.locator('#get li').filter({hasText:'Electronics.'})).toBeVisible();
   await expect(page.locator('#get details')).toHaveCount(0);
 });
-test('photo viewer opens only on request, supports navigation and restores focus',async({page})=>{
- const fullRequests:string[]=[];
- page.on('request',r=>{if(r.url().includes('_h.jpg'))fullRequests.push(r.url());});
- await page.goto('/summerside/');
- // Inline equipment sources already use _h URLs; gallery originals must not preload.
- expect(fullRequests.some(url=>url.includes('42823041980_a87742bb41'))).toBe(false);
- const photo=page.locator('[data-photo-id="42823041980"] a');
- await photo.click();
- const viewer=page.getByRole('dialog',{name:'Journey photographs'});
- await expect(viewer).toBeVisible();
- await expect(viewer.locator('img')).toHaveAttribute('src',/42823041980_a87742bb41/);
- await page.getByRole('button',{name:'Next photograph'}).click();
- await expect(viewer.locator('img')).toHaveAttribute('src',/43723828875_355d1d63b0/);
- await page.keyboard.press('Escape');await expect(viewer).not.toBeVisible();await expect(photo).toBeFocused();
+test('inline gallery selects high resolution photos without opening a dialog',async({page})=>{
+ await page.goto('/summerside/#kaliningrad');
+ const gallery=page.locator('#kaliningrad [data-gallery]');
+ const image=gallery.locator('[data-gallery-image]');
+ await expect(image).toHaveAttribute('src',/42823041980_a87742bb41_h.jpg/);
+ const thumbs=gallery.locator('[data-gallery-thumb]');
+ await thumbs.nth(1).click();
+ await expect(image).toHaveAttribute('src',/43723828875_355d1d63b0_h.jpg/);
+ await expect(thumbs.nth(1)).toHaveAttribute('aria-pressed','true');
+ await expect(thumbs.first()).toHaveAttribute('aria-pressed','false');
+ await thumbs.nth(1).press('End');
+ await expect(thumbs.last()).toBeFocused();
+ await expect(gallery.locator('[data-gallery-next]')).toBeDisabled();
+ await thumbs.last().press('Home');
+ await expect(gallery.locator('[data-gallery-previous]')).toBeDisabled();
+ await expect(page.locator('dialog')).toHaveCount(0);
+ await expect(page.locator('[data-photo-open]')).toHaveCount(0);
 });
 test('scroll interpolates both ways, updates deep links, and keeps stages separate',async({page})=>{
  await page.goto('/summerside/#berlin');
@@ -47,13 +50,15 @@ test('scroll interpolates both ways, updates deep links, and keeps stages separa
  await expect(route).toHaveAttribute('data-current-stage','1');
  await expect.poll(async()=>Number(await route.getAttribute('data-progress'))).toBe(1);
 });
-test('reduced motion shows complete route and missing image leaves viewer controls usable',async({page})=>{
+test('reduced motion and failed photos leave inline navigation usable',async({page})=>{
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/summerside/#berlin');
  await expect(page.locator('[data-stage="1"] [data-route-path]:visible')).toHaveCSS('stroke-dashoffset','0px');
- await page.route('**/*_h.jpg',r=>r.abort());
- await page.locator('[data-photo-id="42823041980"] a').click();
- await expect(page.getByText('This photograph could not be loaded.')).toBeVisible();
- await page.getByRole('button',{name:'Close photographs'}).click();await expect(page.getByRole('dialog')).not.toBeVisible();
+ await page.route('**/43723828875_355d1d63b0_h.jpg',r=>r.abort());
+ const gallery=page.locator('#kaliningrad [data-gallery]');
+ await gallery.locator('[data-gallery-thumb]').nth(1).click();
+ await expect(gallery.locator('[data-gallery-error]')).toBeVisible();
+ await gallery.locator('[data-gallery-next]').click();
+ await expect(gallery.locator('[data-gallery-counter]')).toHaveText('3 / 5');
 });
 for(const size of [{width:320,height:700},{width:390,height:844},{width:1280,height:900},{width:844,height:390}]){
  test(`article fits ${size.width}×${size.height}`,async({page})=>{
@@ -66,7 +71,8 @@ test('article and overview remain useful without JavaScript',async({browser})=>{
  const context=await browser.newContext({javaScriptEnabled:false});const page=await context.newPage();await mockImages(page);
  await page.goto('/summerside/');await expect(page.locator('h1')).toBeVisible();
  await expect(page.getByRole('img',{name:'Two cycling stages across Europe'})).toBeVisible();
- await expect(page.locator('#end')).toContainText('44 days');await context.close();
+ await expect(page.locator('#end')).toContainText('44 days');
+ await expect(page.locator('#kaliningrad .gallery-static img')).toHaveCount(4);await context.close();
 });
 
 test('desktop route is centered, ordered top to bottom, and shows original cities',async({page})=>{
@@ -88,3 +94,16 @@ test('desktop route is centered, ordered top to bottom, and shows original citie
  await expect(second.locator('.route-city')).toHaveCount(5);
  await expect(second.getByRole('link',{name:'Helsingborg',exact:true})).toBeVisible();
 });
+
+for(const width of [390,844]){
+ test(`compact route touches header at ${width}px`,async({page})=>{
+  await page.setViewportSize({width,height:844});
+  await page.goto('/summerside/#berlin');
+  await expect(page.locator('[data-story-route]')).toHaveAttribute('data-current-stage','1');
+  await expect.poll(()=>page.evaluate(()=>{
+   const header=document.querySelector('nav.header')!.getBoundingClientRect();
+   const route=document.querySelector('[data-story-route]')!.getBoundingClientRect();
+   return Math.abs(route.top-header.bottom);
+  })).toBeLessThan(1);
+ });
+}
