@@ -41,6 +41,8 @@ body:has(.summerside) :is(.content,.nav-content,footer) {min-width:0;}
  .summerside section {scroll-margin-top:210px;}
 }
 @media(max-width:600px){
+ .equipment-photos {grid-template-columns:1fr;gap:16px;margin:32px 0;}
+ .equipment-photos .story-photo {margin:0;}
  .story-journey {margin-top:48px;}
  .story-photo figcaption {font-size:12px;line-height:16px;}
 }
