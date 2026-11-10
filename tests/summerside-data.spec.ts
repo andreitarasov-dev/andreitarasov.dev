@@ -34,5 +34,9 @@ test('English draft preserves section associations and original prose links', ()
     expect(article.find((s: {id:string}) => s.id === city.sectionId)).toMatchObject({photoId:city.photoId,stage:city.stage});
   }
   const links = (html:string) => [...html.matchAll(/href="([^"]+)"/g)].map(m=>m[1].replaceAll('&amp;', '&')).sort();
-  expect(links(article.map((s: {html:string}) => s.html).join(''))).toEqual(links(source.replace('https://journal.tinkoff.ru/work_exchange/', 'https://t-j.ru/work_exchange/')));
+  // Preserve the source links except for explicitly requested URL updates.
+  const updatedSource = source
+    .replace('https://journal.tinkoff.ru/work_exchange/', 'https://t-j.ru/work_exchange/')
+    .replace('https://medium.com/@IngMaeSing', 'https://sikorsky.design/');
+  expect(links(article.map((s: {html:string}) => s.html).join(''))).toEqual(links(updatedSource));
 });
