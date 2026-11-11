@@ -47,7 +47,7 @@ test.describe("homepage", () => {
     await mockImages(page);
     await page.goto("/");
 
-    await page.waitForLoadState("networkidle");
+    await page.evaluate(async () => { await document.fonts.ready; });
 
     // Astro's dev toolbar is injected by `astro dev`, which backs the test
     // server. Hide it so the baseline captures only the site itself.
@@ -74,7 +74,7 @@ test.describe("homepage", () => {
       await page.setViewportSize({ width: c.width, height: c.height });
       await mockImages(page);
       await page.goto("/");
-      await page.waitForLoadState("networkidle");
+      await page.evaluate(async () => { await document.fonts.ready; });
 
       const m = await page.evaluate(() => {
         const footer = document.querySelector("footer")!;

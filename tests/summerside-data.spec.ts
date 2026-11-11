@@ -37,7 +37,8 @@ test('English draft preserves section associations and original prose links', ()
   // Preserve the source links except for explicitly requested URL updates.
   const updatedSource = source
     .replace('https://journal.tinkoff.ru/work_exchange/', 'https://t-j.ru/work_exchange/')
-    .replace('https://medium.com/@IngMaeSing', 'https://sikorsky.design/');
+    .replace('https://medium.com/@IngMaeSing', 'https://sikorsky.design/')
+    .replace('https://www.facebook.com/salad.nights', 'mailto:tarasov.a.dev@gmail.com');
   expect(links(article.map((s: {html:string}) => s.html).join(''))).toEqual(links(updatedSource));
 });
 

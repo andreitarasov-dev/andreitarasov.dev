@@ -2,10 +2,12 @@ import { test, expect } from '@playwright/test';
 import {mockImages} from './mockImages';
 
 test.beforeEach(async({page})=>{await mockImages(page);});
-test('unlisted article opens directly with complete content and city navigation',async({page})=>{
+test('article opens from Notes with complete content and city navigation',async({page})=>{
   await page.goto('/');
-  await expect(page.getByRole('link',{name:'Across Europe by bicycle',exact:true})).toHaveCount(0);
-  await page.goto('/summerside/');
+  await expect(page.locator('#notes h3')).toHaveText('Notes');
+  await expect(page.locator('#notes')).toContainText('Summer 2018 · cycling, maps');
+  await page.locator('#notes').getByRole('link',{name:'Across Europe by bicycle',exact:true}).click();
+  await expect(page.locator('#end a[href="mailto:tarasov.a.dev@gmail.com"]')).toHaveText('tarasov.a.dev@gmail.com');
   await expect(page).toHaveURL(/\/summerside\/$/);
   await expect(page.locator('h1')).toHaveText('Across Europe by bicycle');
   await expect(page.locator('[data-story-section]')).toHaveCount(14);

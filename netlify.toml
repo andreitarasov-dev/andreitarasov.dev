@@ -11,12 +11,6 @@
     Cache-Control = "public, max-age=31536000, immutable"
     X-Content-Type-Options = "nosniff"
 
-# Direct-link review: keep the article out of search results until public launch.
-[[headers]]
-  for = "/summerside/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-
 # Public Firebase web-app configuration, embedded in the client bundle.
 # Database access is governed by Firebase rules, not secrecy of these values.
 [build.environment]
