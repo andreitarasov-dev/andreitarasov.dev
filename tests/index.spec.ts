@@ -42,6 +42,25 @@ test.describe("homepage", () => {
     await expect(intro.getByRole("link", { name: /tarasov\.a\.dev/ })).toHaveAttribute("href", "mailto:tarasov.a.dev@gmail.com");
   });
 
+  test("note caption shares the title hover and opens the article", async ({ page, isMobile }) => {
+    await mockImages(page);
+    await page.goto("/");
+    const caption = page.locator("#notes .caption");
+    const link = page.locator("#notes .link-block a");
+    await expect(caption).toHaveCSS("font-size", isMobile ? "12px" : "16px");
+    if (!isMobile) {
+      await caption.hover();
+      await expect(link).toHaveCSS("background-color", "rgb(20, 20, 19)");
+    }
+    await caption.click();
+    await expect(page).toHaveURL(/\/summerside\/$/);
+    await page.goto("/");
+    await caption.focus();
+    await expect(link).toHaveCSS("background-color", "rgb(20, 20, 19)");
+    await caption.press("Enter");
+    await expect(page).toHaveURL(/\/summerside\/$/);
+  });
+
   test("matches screenshot", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "chromium", "Visual baseline is chromium-only");
     await mockImages(page);

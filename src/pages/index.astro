@@ -63,8 +63,12 @@ const experience: Role[] = [
       <h3>Notes</h3>
       <ul>
         <li>
-          <strong><a href="/summerside/" class="link">Across Europe by bicycle</a></strong>
-          <div class="secondary">Summer 2018 · cycling, maps</div>
+          <div class="link-caption-wrapper">
+            <div class="link-block">
+              <a href="/summerside/" class="link">Across Europe by bicycle</a>
+            </div>
+            <div class="caption" tabindex="0">Summer 2018 · cycling, maps</div>
+          </div>
         </li>
       </ul>
     </section>
@@ -76,5 +80,26 @@ const experience: Role[] = [
 
   document.addEventListener("DOMContentLoaded", () => {
     initHomeAvatar();
+
+    document.querySelectorAll<HTMLElement>("#notes .link-caption-wrapper").forEach((wrapper) => {
+      const link = wrapper.querySelector<HTMLAnchorElement>("a");
+      const caption = wrapper.querySelector<HTMLElement>(".caption");
+      if (!link || !caption) return;
+
+      wrapper.addEventListener("click", (event) => {
+        if (event.target instanceof Element && event.target.closest("a")) return;
+        if (event.metaKey || event.ctrlKey) {
+          window.open(link.href, "_blank", "noopener");
+        } else {
+          link.click();
+        }
+      });
+      caption.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          link.click();
+        }
+      });
+    });
   });
 </script>
