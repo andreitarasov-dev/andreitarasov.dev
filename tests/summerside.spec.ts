@@ -5,7 +5,7 @@ test.beforeEach(async({page})=>{await mockImages(page);});
 test('article opens from Notes with complete content and city navigation',async({page})=>{
   await page.goto('/');
   await expect(page.locator('#notes h3')).toHaveText('Notes');
-  await expect(page.locator('#notes')).toContainText('Summer 2018 · cycling, maps');
+  await expect(page.locator('#notes')).toContainText('Two stages. 2,000 km. 24 days of riding.');
   await page.locator('#notes').getByRole('link',{name:'Across Europe by bicycle',exact:true}).click();
   await expect(page.locator('#end a[href="mailto:tarasov.a.dev@gmail.com"]')).toHaveText('tarasov.a.dev@gmail.com');
   await expect(page).toHaveURL(/\/summerside\/$/);
