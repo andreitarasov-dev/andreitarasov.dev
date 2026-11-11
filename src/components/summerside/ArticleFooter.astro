@@ -1,0 +1,23 @@
+---
+import ArticleLike from './ArticleLike.astro';
+import config from 'virtual:theme-config';
+const address = `${config.site.domain}${Astro.url.pathname.replace(/\/$/, '')}`;
+---
+<div class="social" data-article-footer>
+  <ArticleLike pageId="summerside" />
+  <strong class="dot-separator" aria-hidden="true">·</strong>
+  <div><strong class="share"><button disabled type="button" class="link" data-copy-link data-url={`https://${address}/`}>Copy&nbsp;&&nbsp;Share:</button></strong></div>
+  <div><strong class="share"><span class="link-address">{` ${address}`}</span></strong></div>
+  <noscript><span class="share">JavaScript is needed to like or copy. The article address is shown above.</span></noscript>
+  <span class="footer-status" role="status" aria-live="polite"></span>
+</div>
+<style>
+  [data-copy-link] { border: 0; padding: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+  [data-copy-link]:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  .footer-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .footer-status.is-visible { position: static; width: auto; height: auto; overflow: visible; clip-path: none; flex-basis: 100%; font-size: 14px; padding-left: 12px; }
+</style>
+<script>
+  import { initArticleFooter } from '../../scripts/article-footer';
+  document.querySelectorAll<HTMLElement>('[data-article-footer]').forEach(initArticleFooter);
+</script>

@@ -40,3 +40,17 @@ test('English draft preserves section associations and original prose links', ()
     .replace('https://medium.com/@IngMaeSing', 'https://sikorsky.design/');
   expect(links(article.map((s: {html:string}) => s.html).join(''))).toEqual(links(updatedSource));
 });
+
+test('overview omits invisible world geometry while retaining the full cycling routes', async () => {
+  const {buildOverviewGeometry}=await import('../src/lib/summerside/geometry');
+  const stages=JSON.parse(readFileSync(join(folder,'routes.json'),'utf8'));
+  const overview=buildOverviewGeometry(stages);
+  expect(overview.paths).toHaveLength(2);
+  expect(overview.cities).toHaveLength(10);
+  // A regression to unclipped geography adds more than a megabyte to the HTML.
+  expect(overview.land.join('').length).toBeLessThan(200_000);
+  for(const path of overview.land){
+    const numbers=path!.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
+    expect(numbers.every((value,index)=>value>=-.01 && value<=(index%2===0?710.01:460.01))).toBe(true);
+  }
+});

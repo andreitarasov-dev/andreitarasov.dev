@@ -5,6 +5,7 @@ import StoryRoute from '../../components/summerside/StoryRoute.astro';
 import StoryPhoto from '../../components/summerside/StoryPhoto.astro';
 import StoryBlocks from '../../components/summerside/StoryBlocks.astro';
 import StoryGallery from '../../components/summerside/StoryGallery.astro';
+import ArticleFooter from '../../components/summerside/ArticleFooter.astro';
 import article from '../../content/summerside/article.en.json';
 import media from '../../content/summerside/media.json';
 import inventory from '../../content/summerside/inventory.json';
@@ -17,7 +18,7 @@ const gallery=inventory.photoIds;
 const before=sections.filter(s=>!s.stage&&s.id!=='end');
 const end=sections.find(s=>s.id==='end')!;
 ---
-<Layout pageId="summerside" title="Across Europe by bicycle" description="Our 2018 cycling journey across Europe: two stages, over 2,000 km, and 24 days in the saddle.">
+<Layout title="Across Europe by bicycle" description="Our 2018 cycling journey across Europe: two stages, over 2,000 km, and 24 days in the saddle.">
  <article class="summerside" data-story>
   <header class="story-header" id="top">
    <div class="metadata"><time datetime="2018">Summer 2018</time><span> · cycling, maps</span></div>
@@ -39,6 +40,7 @@ const end=sections.find(s=>s.id==='end')!;
   </div>
   <section class="story-prose" id="end"><h2>{end.title}</h2><StoryBlocks section={end}/></section>
  </article>
+ <ArticleFooter />
 </Layout>
 <script>
  import {initStoryRoute} from '../../scripts/summerside-route';

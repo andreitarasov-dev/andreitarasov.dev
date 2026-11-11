@@ -134,15 +134,15 @@ test('preview strip reveals hidden photos in both directions without moving the 
  await expect(gallery.locator('[data-gallery-counter]')).toHaveCount(0);
 });
 
-test('article uses the shared like and copy-share footer',async({page})=>{
+test('article preserves the theme like and copy-share footer',async({page})=>{
  await page.addInitScript(()=>{
   Object.defineProperty(navigator,'clipboard',{value:{writeText:async(text:string)=>{(window as any).__copied=text;}}});
  });
  await page.goto('/summerside/');
- await expect(page.locator('#likeButton')).toHaveAttribute('data-page-id','summerside');
+ await expect(page.getByRole('button',{name:'Like this article',exact:true})).toHaveAttribute('data-page-id','summerside');
  await expect(page.getByText('Back to the beginning ↑',{exact:true})).toHaveCount(0);
- await page.locator('#copy-link').click();
- await expect.poll(()=>page.evaluate(()=>(window as any).__copied)).toBe('andreitarasov.dev/summerside/');
+ await page.getByRole('button',{name:'Copy & Share:'}).click();
+ await expect.poll(()=>page.evaluate(()=>(window as any).__copied)).toBe('https://andreitarasov.dev/summerside/');
 });
 
  test('compact route reveals one continuous prefix and labels stay beside their dots',async({page})=>{

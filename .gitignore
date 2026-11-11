@@ -28,3 +28,6 @@ pnpm-debug.log*
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Local media export staging (originals and upload candidates)
+/media-staging/

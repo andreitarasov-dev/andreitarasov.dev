@@ -9,13 +9,14 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "playwright test",
+    "test:media": "node --test tests/media-export.test.mjs",
     "test:update": "playwright test --update-snapshots"
   },
   "dependencies": {
     "@astrojs/check": "^0.7.0",
     "@astrojs/ts-plugin": "^1.8.0",
     "@sikorsky/site": "0.5.4",
-    "astro": "4.16.1",
+    "astro": "4.16.19",
     "d3-geo": "^3.1.2",
     "firebase": "^11.0.1",
     "topojson-client": "^3.1.0",

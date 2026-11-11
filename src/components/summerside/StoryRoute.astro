@@ -4,7 +4,7 @@ import routes from '../../content/summerside/routes.json';
 import type {RouteStage} from '../../lib/summerside/types';
 const stages=routes as RouteStage[];
 ---
-<aside class="story-route" data-story-route aria-label="Journey progress">
+<aside class="story-route" data-story-route hidden aria-label="Journey progress">
  <strong data-route-label>Kaliningrad → Amsterdam</strong>
  <span data-route-percent hidden aria-hidden="true"></span>
  {stages.map(stage=><div data-stage={stage.id}>
