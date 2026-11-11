@@ -24,10 +24,10 @@ test('inline gallery selects high resolution photos without opening a dialog',as
  await page.goto('/summerside/#kaliningrad');
  const gallery=page.locator('#kaliningrad [data-gallery]');
  const image=gallery.locator('[data-gallery-image]');
- await expect(image).toHaveAttribute('src',/42823041980_a87742bb41_h.jpg/);
+ await expect(image).toHaveAttribute('src',/42823041980-1600-[a-f0-9]+\.jpg/);
  const thumbs=gallery.locator('[data-gallery-thumb]');
  await thumbs.nth(1).click();
- await expect(image).toHaveAttribute('src',/43723828875_355d1d63b0_h.jpg/);
+ await expect(image).toHaveAttribute('src',/43723828875-1600-[a-f0-9]+\.jpg/);
  await expect(thumbs.nth(1)).toHaveAttribute('aria-pressed','true');
  await expect(thumbs.first()).toHaveAttribute('aria-pressed','false');
  await thumbs.nth(1).press('End');
@@ -54,7 +54,7 @@ test('scroll interpolates both ways, updates deep links, and keeps stages separa
 test('reduced motion and failed photos leave inline navigation usable',async({page})=>{
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/summerside/#berlin');
  await expect.poll(()=>page.locator('[data-stage="1"] svg:visible').evaluate(svg=>svg.querySelector('[data-route-path]')!.getAttribute('d')===svg.querySelector('.route-base')!.getAttribute('d'))).toBe(true);
- await page.route('**/43723828875_355d1d63b0_h.jpg',r=>r.abort());
+ await page.route('**/43723828875-*',r=>r.abort());
  const gallery=page.locator('#kaliningrad [data-gallery]');
  await gallery.locator('[data-gallery-thumb]').nth(1).click();
  await expect(gallery.locator('[data-gallery-error]')).toBeVisible();
@@ -163,3 +163,15 @@ test('article preserves the theme like and copy-share footer',async({page})=>{
    }))).toBe(true);
   }
  });
+
+test('mobile gallery selects a responsive local image and decodes it',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/summerside/#kaliningrad');
+ const gallery=page.locator('#kaliningrad [data-gallery]');
+ await gallery.locator('[data-gallery-thumb]').nth(1).click();
+ const image=gallery.locator('[data-gallery-image]');
+ await expect.poll(()=>image.evaluate((img:HTMLImageElement)=>img.complete&&img.naturalWidth>0&&img.currentSrc.includes('/media/summerside/43723828875-'))).toBe(true);
+ const selected=await image.evaluate((img:HTMLImageElement)=>img.currentSrc);
+ expect(selected).toMatch(/\.(avif|webp)$/);
+ await expect(gallery.locator('[data-gallery-error]')).toBeHidden();
+});

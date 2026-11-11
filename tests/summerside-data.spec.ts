@@ -54,3 +54,19 @@ test('overview omits invisible world geometry while retaining the full cycling r
     expect(numbers.every((value,index)=>value>=-.01 && value<=(index%2===0?710.01:460.01))).toBe(true);
   }
 });
+
+test('every published photo and responsive variant is included in the static deployment', () => {
+  const photos=JSON.parse(readFileSync(join(folder,'media.json'),'utf8'));
+  expect(photos).toHaveLength(199);
+  const urls=new Set<string>();
+  for(const photo of photos){
+    expect(photo.delivery).toBe('published');
+    expect(photo.sources.map((s:{type:string})=>s.type)).toEqual(['image/avif','image/webp','image/jpeg']);
+    urls.add(photo.fullUrl);urls.add(photo.fallbackUrl);
+    for(const source of photo.sources){
+      for(const entry of source.srcset.split(', '))urls.add(entry.split(' ')[0]);
+    }
+  }
+  expect(urls.size).toBe(1782);
+  expect([...urls].every(url=>/^\/media\/summerside\/[a-z0-9-]+\.(avif|webp|jpg)$/.test(url)&&existsSync(join(process.cwd(),'public',url)))).toBe(true);
+});

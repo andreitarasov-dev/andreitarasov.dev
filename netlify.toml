@@ -4,6 +4,13 @@
 
 # Node is selected by .nvmrc, shared with local development and CI.
 
+# Content-hashed photo filenames change whenever their pixels change.
+[[headers]]
+  for = "/media/summerside/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
 # Direct-link review: keep the article out of search results until public launch.
 [[headers]]
   for = "/summerside/*"
